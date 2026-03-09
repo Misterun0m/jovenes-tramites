@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+
+* { box-sizing: border-box; }
+body, * { font-family: 'Sora', sans-serif; }
+
+/* ── FONDO ── */
+.reg-bg {
+  background: #eef0f7;
+}
+
+/* ── CARD ── */
+.reg-container {
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(90, 30, 150, 0.18);
+  max-width: 960px;
+  width: 100%;
+  animation: fadeInUp 0.8s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── LADO IZQUIERDO ── */
+.reg-left {
+  background: linear-gradient(145deg, #5a189a 0%, #7b2cbf 45%, #9d4edd 100%);
+  padding: 48px 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.reg-left::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 60px solid rgba(255,255,255,0.07);
+  top: -80px; left: -80px;
+  pointer-events: none;
+}
+
+.reg-left::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 40px solid rgba(255,255,255,0.07);
+  bottom: -40px; right: -40px;
+  pointer-events: none;
+}
+
+.reg-badge {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.25);
+  position: relative; z-index: 1;
+}
+
+.reg-icon-wrap {
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  width: 90px; height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(255,255,255,0.2);
+  font-size: 36px; color: #fff;
+  position: relative; z-index: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.reg-left h2 {
+  color: #fff; font-size: 22px; font-weight: 700;
+  line-height: 1.4; position: relative; z-index: 1;
+}
+
+.reg-sub {
+  color: rgba(255,255,255,0.75);
+  font-size: 13px; font-weight: 300;
+  position: relative; z-index: 1;
+}
+
+.reg-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px; padding: 10px 16px;
+  color: #fff; font-size: 13px;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+
+.reg-login-link {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px; position: relative; z-index: 1;
+  margin: 0;
+}
+
+.reg-link-white {
+  color: #fff; font-weight: 700;
+  text-decoration: none;
+}
+.reg-link-white:hover { text-decoration: underline; }
+
+/* ── LADO DERECHO ── */
+.reg-right {
+  background: #fff;
+  padding: 44px 48px;
+}
+
+.reg-greeting {
+  font-size: 11px; font-weight: 600;
+  color: #9d4edd; letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.reg-right h3 {
+  font-size: 26px; font-weight: 700; color: #1a1a2e;
+}
+
+.reg-subtitle {
+  font-size: 14px; color: #8a8a9a; font-weight: 300;
+}
+
+/* ── CAMPOS ── */
+.field-label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: #555570; letter-spacing: 0.4px;
+}
+
+.field-inner {
+  display: flex; align-items: center;
+  border: 1.5px solid #e2e2ef;
+  border-radius: 14px; background: #f9f9fd;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.field-inner:focus-within {
+  border-color: #7b2cbf;
+  box-shadow: 0 0 0 4px rgba(123,44,191,0.1);
+  background: #fff;
+}
+
+.field-inner .icon {
+  padding: 0 14px; color: #bbb; font-size: 17px; flex-shrink: 0;
+}
+
+.field-inner input {
+  flex: 1; border: none; background: transparent;
+  padding: 13px 0; font-size: 14px;
+  font-family: 'Sora', sans-serif; color: #1a1a2e;
+  outline: none; min-width: 0;
+}
+
+.field-inner input::placeholder { color: #c0c0d0; }
+
+.toggle-pass {
+  background: none; border: none; cursor: pointer;
+  padding: 0 14px; color: #bbb; font-size: 17px;
+  transition: color 0.2s; line-height: 1; flex-shrink: 0;
+}
+.toggle-pass:hover { color: #7b2cbf; }
+
+/* ── SEXO ── */
+.sex-options {
+  display: flex; gap: 12px;
+}
+
+.sex-option {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 12px;
+  border: 1.5px solid #e2e2ef; border-radius: 14px;
+  background: #f9f9fd; cursor: pointer;
+  font-size: 14px; font-weight: 500; color: #8a8a9a;
+  transition: all 0.2s;
+}
+
+.sex-option input[type="radio"] { display: none; }
+
+.sex-option i { font-size: 18px; }
+
+.sex-option.selected {
+  border-color: #7b2cbf;
+  background: rgba(123,44,191,0.06);
+  color: #7b2cbf;
+  box-shadow: 0 0 0 4px rgba(123,44,191,0.08);
+}
+
+.sex-option:hover:not(.selected) {
+  border-color: #c084fc;
+  color: #7b2cbf;
+}
+
+/* ── BOTÓN REGISTRAR ── */
+.btn-registrar {
+  all: unset; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%;
+  background: linear-gradient(90deg, #5a189a, #9d4edd);
+  border-radius: 14px; color: #fff;
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+  padding: 14px; letter-spacing: 0.5px; cursor: pointer;
+  box-shadow: 0 6px 20px rgba(123,44,191,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 50px;
+}
+
+.btn-registrar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(123,44,191,0.45);
+}
+
+.btn-registrar:active { transform: scale(0.98); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 767px) {
+  .reg-right    { padding: 36px 24px; }
+  .reg-container { border-radius: 20px; }
+}

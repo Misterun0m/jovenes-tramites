@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+
+* { box-sizing: border-box; font-family: 'Sora', sans-serif; }
+
+/* ── FONDO ── */
+.recovery-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, #5a189a 0%, #7b2cbf 45%, #9d4edd 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Aro superior izquierdo */
+.recovery-page::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  border: 80px solid rgba(255,255,255,0.06);
+  top: -150px; left: -120px;
+  pointer-events: none;
+}
+
+/* Aro inferior derecho */
+.recovery-page::after {
+  content: '';
+  position: absolute;
+  width: 350px; height: 350px;
+  border-radius: 50%;
+  border: 60px solid rgba(255,255,255,0.06);
+  bottom: -100px; right: -80px;
+  pointer-events: none;
+}
+
+/* ── CARD ── */
+.recovery-card {
+  background: white;
+  padding: 50px;
+  border-radius: 24px;
+  width: 400px;
+  text-align: center;
+  animation: fadeUp .6s ease;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── ICON ── */
+.icon-area { margin-bottom: 20px; }
+
+.mail-circle {
+  width: 70px; height: 70px;
+  margin: auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5a189a, #9d4edd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; color: white;
+  box-shadow: 0 8px 20px rgba(123,44,191,0.35);
+}
+
+/* ── TEXT ── */
+h2 { font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+.subtitle { color: #8a8a9a; font-size: 14px; margin-bottom: 25px; font-weight: 300; }
+
+/* ── INPUT ── */
+.form-control {
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  border: 1.5px solid #e2e2ef;
+  background: #f9f9fd;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: #7b2cbf;
+  box-shadow: 0 0 0 4px rgba(123,44,191,0.1);
+  background: #fff;
+}
+
+/* ── BOTÓN ── */
+.btn-recovery {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #5a189a, #9d4edd);
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(123,44,191,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-recovery:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(123,44,191,0.45);
+}
+
+.btn-recovery:active { transform: scale(0.98); }
+
+/* ── LINK ── */
+.back-link {
+  display: block;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #7b2cbf;
+  text-decoration: none;
+  font-weight: 600;
+}
+.back-link:hover { color: #5a189a; text-decoration: underline; }
+
+/* ── ALERTAS ── */
+.custom-alert {
+  padding: 12px; border-radius: 12px;
+  margin-bottom: 15px; font-weight: 500; font-size: 13px;
+}
+.alert-success { background: #d1f7e2; color: #0a7a4f; }
+.alert-error   { background: #ffd6d6; color: #a30000; }
+
+/* ── ANIMACIÓN ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

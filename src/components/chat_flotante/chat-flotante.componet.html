@@ -1,0 +1,150 @@
+<!-- chat-flotante.component.html -->
+
+<!-- Botón flotante redondo -->
+<button class="chat-fab rounded-circle shadow-lg border-0 d-flex align-items-center justify-content-center"
+        (click)="toggleChat()"
+        [class.abierto]="abierto"
+        title="Asistente TramiteBot">
+  @if (!abierto) {
+    <i class="bi bi-chat-dots-fill fs-4"></i>
+  } @else {
+    <i class="bi bi-x-lg fs-5"></i>
+  }
+</button>
+
+<!-- Ventana del chat -->
+@if (abierto) {
+  <div class="chat-window shadow rounded-4 overflow-hidden d-flex flex-column">
+
+    <!-- Header -->
+    <div class="chat-header px-3 py-2 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <div class="chat-avatar rounded-circle d-flex align-items-center justify-content-center">
+          <i class="bi bi-robot fs-5 text-white"></i>
+        </div>
+        <div>
+          <div class="fw-semibold text-white" style="font-size:14px;">TramiteBot</div>
+          <div class="d-flex align-items-center gap-1">
+            @if (!estaLogueado) {
+              <span class="status-dot locked"></span>
+              <span class="text-white-50" style="font-size:11px;">Bloqueado</span>
+            } @else if (cargando) {
+              <span class="status-dot typing"></span>
+              <span class="text-white-50" style="font-size:11px;">Escribiendo...</span>
+            } @else {
+              <span class="status-dot online"></span>
+              <span class="text-white-50" style="font-size:11px;">En línea</span>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-1">
+        @if (estaLogueado) {
+          <button class="btn btn-sm border-0 text-white opacity-75 d-flex align-items-center"
+                  (click)="limpiarChat()" title="Limpiar conversación">
+            <i class="bi bi-trash3"></i>
+          </button>
+        }
+        <button class="btn btn-sm border-0 text-white opacity-75 d-flex align-items-center"
+                (click)="toggleChat()" title="Cerrar">
+          <i class="bi bi-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Vista bloqueada (sin sesión) -->
+    @if (!estaLogueado) {
+      <div class="chat-locked d-flex flex-column align-items-center justify-content-center flex-grow-1 px-4 text-center">
+        <div class="lock-icon rounded-circle d-flex align-items-center justify-content-center mb-3">
+          <i class="bi bi-lock-fill fs-3 text-white"></i>
+        </div>
+        <h6 class="fw-bold text-dark mb-1">Acceso exclusivo</h6>
+        <p class="text-muted mb-3" style="font-size:13px;">
+          Inicia sesión o crea tu cuenta gratis para chatear con TramiteBot y resolver todas tus dudas sobre trámites 🇲🇽
+        </p>
+        <div class="d-flex flex-column gap-2 w-100">
+          <button class="btn btn-primary-custom w-100 rounded-pill fw-semibold"
+                  (click)="irARegistro()">
+            <i class="bi bi-person-plus-fill me-2"></i>Crear cuenta gratis
+          </button>
+          <button class="btn btn-outline-custom w-100 rounded-pill"
+                  (click)="irALogin()">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Ya tengo cuenta
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Vista activa (con sesión) -->
+    @if (estaLogueado) {
+      <!-- Mensajes -->
+      <div class="chat-messages px-3 py-2 flex-grow-1 overflow-auto" #messagesContainer>
+        @for (msg of mensajes; track $index) {
+
+          @if (msg.role === 'assistant') {
+            <div class="d-flex align-items-end gap-2 mb-3">
+              <div class="bot-avatar-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-robot text-white" style="font-size:12px;"></i>
+              </div>
+              <div class="bubble-bot rounded-3 px-3 py-2 shadow-sm">
+                @if (msg.loading) {
+                  <div class="typing-dots d-flex gap-1 align-items-center py-1">
+                    <span></span><span></span><span></span>
+                  </div>
+                } @else {
+                  <p class="mb-0 msg-text">{{ msg.content }}</p>
+                  <span class="msg-time d-block text-end mt-1">
+                    <i class="bi bi-clock me-1"></i>{{ formatHora(msg.timestamp) }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          @if (msg.role === 'user') {
+            <div class="d-flex align-items-end justify-content-end gap-2 mb-3">
+              <div class="bubble-user rounded-3 px-3 py-2 shadow-sm">
+                <p class="mb-0 msg-text text-white">{{ msg.content }}</p>
+                <span class="msg-time d-block text-end mt-1 text-white-50">
+                  <i class="bi bi-check2-all me-1"></i>{{ formatHora(msg.timestamp) }}
+                </span>
+              </div>
+              <div class="user-avatar-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-person-fill text-white" style="font-size:12px;"></i>
+              </div>
+            </div>
+          }
+
+        }
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input-area px-3 py-2 border-top d-flex align-items-end gap-2">
+        <textarea
+          #inputRef
+          [(ngModel)]="inputTexto"
+          (keydown)="onKeydown($event)"
+          placeholder="Escribe tu pregunta sobre trámites..."
+          class="form-control form-control-sm chat-input rounded-3"
+          rows="1"
+          [disabled]="cargando">
+        </textarea>
+        <button class="btn btn-send rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                (click)="enviarMensaje()"
+                [disabled]="!inputTexto.trim() || cargando">
+          @if (cargando) {
+            <div class="spinner-border spinner-border-sm text-white" role="status"></div>
+          } @else {
+            <i class="bi bi-send-fill text-white"></i>
+          }
+        </button>
+      </div>
+    }
+
+    <!-- Footer -->
+    <div class="chat-footer text-center py-1 px-2">
+      <i class="bi bi-shield-check me-1"></i>Asistente oficial · Solo trámites mexicanos 🇲🇽
+    </div>
+
+  </div>
+}

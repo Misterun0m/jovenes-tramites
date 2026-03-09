@@ -1,0 +1,301 @@
+/* chat-flotante.component.css */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:host {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── Botón flotante ─── */
+.chat-fab {
+  width: 58px;
+  height: 58px;
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5) !important;
+}
+
+.chat-fab:hover {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 14px 35px rgba(124, 58, 237, 0.6) !important;
+}
+
+.chat-fab.abierto {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* ─── Ventana ─── */
+.chat-window {
+  position: absolute;
+  bottom: 72px;
+  right: 0;
+  width: 360px;
+  height: 530px;
+  background: #fff;
+  animation: slideUp .35s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(.94); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* ─── Header ─── */
+.chat-header {
+  background: linear-gradient(135deg, #3b0764, #5b21b6, #7c3aed);
+  flex-shrink: 0;
+}
+
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, .15);
+  border: 2px solid rgba(255, 255, 255, .3);
+  flex-shrink: 0;
+}
+
+/* ─── Status dots ─── */
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot.online { background: #34d399; box-shadow: 0 0 6px #34d399; }
+.status-dot.typing { background: #fbbf24; animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+/* ─── Área de mensajes ─── */
+.chat-messages {
+  background: #f5f3ff;
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 4px; }
+
+/* ─── Avatares pequeños ─── */
+.bot-avatar-sm {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  flex-shrink: 0;
+}
+
+.user-avatar-sm {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #4c1d95, #6d28d9);
+  flex-shrink: 0;
+}
+
+/* ─── Burbujas ─── */
+.bubble-bot {
+  background: white;
+  border: 1px solid #ede9fe;
+  max-width: 80%;
+  border-bottom-left-radius: 4px !important;
+  animation: fadeIn .2s ease;
+}
+
+.bubble-user {
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  max-width: 80%;
+  border-bottom-right-radius: 4px !important;
+  animation: fadeIn .2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msg-text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #1e1b4b;
+}
+
+.bubble-user .msg-text { color: white; }
+
+.msg-time {
+  font-size: 10px;
+  opacity: .5;
+  color: #6b7280;
+}
+
+/* ─── Typing dots ─── */
+.typing-dots span {
+  width: 7px;
+  height: 7px;
+  background: #a78bfa;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce .9s infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: .15s; }
+.typing-dots span:nth-child(3) { animation-delay: .30s; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ─── Input ─── */
+.chat-input-area {
+  background: white;
+  flex-shrink: 0;
+}
+
+.chat-input {
+  resize: none;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 13.5px;
+  font-family: 'DM Sans', sans-serif;
+  border: 1.5px solid #ede9fe !important;
+  background: #faf9ff !important;
+  color: #1e1b4b !important;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.chat-input:focus {
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, .12) !important;
+  outline: none;
+}
+
+.chat-input:disabled { opacity: .6; cursor: not-allowed; }
+
+.btn-send {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  border: none;
+  transition: all .2s;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, .35);
+  flex-shrink: 0;
+}
+
+.btn-send:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, .5);
+}
+
+.btn-send:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* ─── Footer ─── */
+.chat-footer {
+  background: white;
+  font-size: 10px;
+  color: #9ca3af;
+  border-top: 1px solid #f3f4f6;
+  flex-shrink: 0;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+  :host { bottom: 16px; right: 16px; }
+  .chat-window {
+    width: calc(100vw - 32px);
+    height: 480px;
+    right: 0;
+  }
+}
+
+/* ─── Bloqueo de registro ─── */
+.chat-blocked-bar {
+  background: linear-gradient(135deg, #3b0764, #5b21b6);
+  flex-shrink: 0;
+}
+
+.chat-blocked-bar .btn-registro {
+  background: white;
+  color: #5b21b6;
+  font-weight: 600;
+  font-size: 12px;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  transition: all .2s;
+}
+
+.chat-blocked-bar .btn-registro:hover {
+  background: #ede9fe;
+  transform: scale(1.04);
+}
+
+.chat-blocked-bar .btn-login {
+  background: transparent;
+  color: white;
+  font-size: 12px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 20px;
+  padding: 6px 14px;
+  transition: all .2s;
+}
+
+.chat-blocked-bar .btn-login:hover {
+  background: rgba(255,255,255,.1);
+}
+
+/* ─── Vista bloqueada ─── */
+.chat-locked {
+  background: #f8f7ff;
+}
+
+.lock-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, .35);
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 13.5px;
+  transition: all .2s;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, .35);
+}
+
+.btn-primary-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, .45);
+  color: white;
+}
+
+.btn-outline-custom {
+  background: white;
+  color: #5b21b6;
+  border: 1.5px solid #7c3aed;
+  padding: 10px;
+  font-size: 13.5px;
+  transition: all .2s;
+}
+
+.btn-outline-custom:hover {
+  background: #ede9fe;
+  color: #4c1d95;
+}
+
+.status-dot.locked { background: #f87171; box-shadow: 0 0 6px #f87171; }

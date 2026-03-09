@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+
+body, .login-bg * { font-family: 'Sora', sans-serif; }
+
+/* ── FONDO ── */
+.login-bg {
+  background: #eef0f7;
+}
+
+/* ── CARD ── */
+.login-container {
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(90, 30, 150, 0.18);
+  max-width: 960px;
+  width: 100%;
+}
+
+/* ══════════════════════════
+   LADO IZQUIERDO
+══════════════════════════ */
+.left-side {
+  background: linear-gradient(145deg, #5a189a 0%, #7b2cbf 45%, #9d4edd 100%);
+  padding: 48px 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-side::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 60px solid rgba(255,255,255,0.07);
+  top: -80px; left: -80px;
+  pointer-events: none;
+}
+
+.left-side::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 40px solid rgba(255,255,255,0.07);
+  bottom: -40px; right: -40px;
+  pointer-events: none;
+}
+
+.badge-top {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.25);
+  position: relative;
+  z-index: 1;
+}
+
+.rocket-wrap {
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 150px; height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.rocket-img {
+  width: 85px; height: 85px;
+  object-fit: contain;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+.left-side h2 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+}
+
+.left-sub {
+  color: rgba(255,255,255,0.75) !important;
+  font-size: 14px;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+
+.pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
+}
+
+.pill i { font-size: 16px; opacity: 0.9; }
+
+/* ══════════════════════════
+   LADO DERECHO
+══════════════════════════ */
+.right-side {
+  background: #fff;
+  padding: 52px 48px;
+}
+
+.greeting {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9d4edd;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.right-side h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #8a8a9a;
+  font-weight: 300;
+}
+
+/* ── CAMPOS ── */
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555570;
+  letter-spacing: 0.4px;
+}
+
+.field-inner {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e2e2ef;
+  border-radius: 14px;
+  background: #f9f9fd;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.field-inner:focus-within {
+  border-color: #7b2cbf;
+  box-shadow: 0 0 0 4px rgba(123,44,191,0.1);
+  background: #fff;
+}
+
+.field-inner .icon {
+  padding: 0 14px;
+  color: #bbb;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.field-inner input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 13px 0;
+  font-size: 14px;
+  font-family: 'Sora', sans-serif;
+  color: #1a1a2e;
+  outline: none;
+  min-width: 0;
+}
+
+.field-inner input::placeholder { color: #c0c0d0; }
+
+.toggle-pass {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 14px;
+  color: #bbb;
+  font-size: 17px;
+  transition: color 0.2s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.toggle-pass:hover { color: #7b2cbf; }
+
+/* ── LINKS ── */
+.link-muted {
+  color: #8a8a9a;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.link-muted:hover { color: #7b2cbf; }
+
+.link-purple {
+  color: #7b2cbf;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 13px;
+}
+.link-purple:hover { color: #5a189a; }
+
+/* ══════════════════════════
+   ✅ BOTÓN INGRESAR — 100% CSS puro
+   Nombre de clase distinto para evitar cualquier conflicto
+══════════════════════════ */
+.btn-ingresar {
+  /* Reset absoluto de cualquier estilo heredado */
+  all: unset;
+  /* Estilos propios */
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  background: linear-gradient(90deg, #5a189a, #9d4edd);
+  border-radius: 14px;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 20px rgba(123,44,191,0.35);
+  min-height: 50px;
+  margin-bottom: 20px;
+}
+
+.btn-ingresar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(123,44,191,0.45);
+}
+
+.btn-ingresar:active { transform: scale(0.98); }
+
+.btn-ingresar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Spinner dentro del botón */
+.spin {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── DIVISOR ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #ebebf5;
+}
+
+.divider-text {
+  font-size: 12px;
+  color: #bbb;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════
+   ✅ GOOGLE — centrado y redondeado
+══════════════════════════ */
+.google-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+#googleButton {
+  width: auto;
+}
+
+#googleButton > div {
+  border-radius: 14px !important;
+}
+
+#googleButton iframe {
+  border-radius: 14px !important;
+}
+/* Pega esto al final de tu login.css */
+
+.link-back-home {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s, transform 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.link-back-home:hover {
+  color: #fff;
+  transform: translateX(-3px);
+}

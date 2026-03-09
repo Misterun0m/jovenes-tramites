@@ -1,0 +1,103 @@
+<div class="login-bg d-flex align-items-center justify-content-center min-vh-100 p-3">
+
+  <div class="login-container" @cardEntrance>
+    <div class="row g-0">
+
+      <!-- LADO IZQUIERDO (oculto en móvil) -->
+      <div class="col-md-5 left-side d-none d-md-flex flex-column align-items-center justify-content-center gap-3 text-center"
+           @leftEntrance>
+        <span class="badge-top">Portal Oficial</span>
+
+        <div class="rocket-wrap mx-auto">
+          <img src="/img/18.png" alt="Cohete" class="rocket-img">
+        </div>
+
+        <h2>Trámites para<br>Futuros Adultos</h2>
+        <p class="left-sub">Tu guía para comenzar tu nueva etapa</p>
+
+        <div class="d-flex flex-column gap-2 w-100">
+          <div class="pill d-flex align-items-center gap-2">
+            <i class="bi bi-shield-check"></i> Plataforma segura y oficial
+          </div>
+          <div class="pill d-flex align-items-center gap-2">
+            <i class="bi bi-lightning-charge"></i> Proceso rápido y sencillo
+          </div>
+          <div class="pill d-flex align-items-center gap-2">
+            <i class="bi bi-person-check"></i> Acompañamiento personalizado
+          </div>
+        </div>
+
+        <!-- ✅ Link de regreso a inicio -->
+        <a routerLink="/" class="link-back-home">
+          <i class="bi bi-arrow-left"></i> Volver al inicio
+        </a>
+
+      </div>
+
+      <!-- LADO DERECHO -->
+      <div class="col-md-7 right-side d-flex flex-column justify-content-center"
+           @formStagger>
+
+        <p class="greeting mb-1">Bienvenido</p>
+        <h3 class="mb-1">Iniciar Sesión</h3>
+        <p class="subtitle mb-4">Accede a tu cuenta para gestionar tus trámites</p>
+
+        <!-- Correo -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-1">Correo electrónico</label>
+          <div class="field-inner">
+            <i class="bi bi-envelope icon"></i>
+            <input type="email" [(ngModel)]="correo" placeholder="tucorreo@ejemplo.com">
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-1">Contraseña</label>
+          <div class="field-inner">
+            <i class="bi bi-lock icon"></i>
+            <input [type]="showPassword ? 'text' : 'password'"
+                   [(ngModel)]="password"
+                   placeholder="••••••••">
+            <button type="button" class="toggle-pass" (click)="showPassword = !showPassword">
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="d-flex justify-content-between mb-4">
+          <a routerLink="/recuperar" class="link-muted">Olvidé mi contraseña</a>
+          <a routerLink="/registro" class="link-purple">Registrarse</a>
+        </div>
+
+        <!-- Botón ingresar -->
+        <button type="button" class="btn-ingresar" (click)="loginNormal()" [disabled]="isLoading">Ingresar
+          <span *ngIf="!isLoading"> </span>
+          <span *ngIf="isLoading" class="spin"></span>
+        </button>
+
+        <!-- Divisor -->
+        <div class="divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">o continúa con</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Google -->
+        <div class="google-wrap">
+          <div id="googleButton"></div>
+        </div>
+
+        <!-- ✅ Link de regreso visible solo en móvil -->
+        <div class="d-md-none text-center mt-3">
+          <a routerLink="/" class="link-muted">
+            <i class="bi bi-arrow-left"></i> Volver al inicio
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

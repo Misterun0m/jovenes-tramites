@@ -1,0 +1,93 @@
+<!-- NAVBAR -->
+<nav class="navbar-custom">
+  <div class="navbar-brand">
+    <div class="brand-icon"><i class="bi bi-rocket-takeoff-fill"></i></div>
+    <div class="brand-name">
+      Trámites 18+
+      <span>Portal Oficial</span>
+    </div>
+  </div>
+  <div class="nav-btns">
+    <button class="btn-nav-outline" (click)="irALogin()">Iniciar sesión</button>
+    <button class="btn-nav-fill"    (click)="irARegistro()">Registrarse</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><i class="bi bi-shield-check"></i> Plataforma oficial y segura</div>
+  <h1>Tu guía para los <em>trámites</em><br>más importantes de tu vida</h1>
+  <p>Todo lo que necesitas saber para comenzar tu vida adulta, en un solo lugar.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Trámites disponibles</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
+    <div class="stat"><div class="stat-num">18+</div><div class="stat-label">Para ti</div></div>
+  </div>
+</div>
+
+<!-- TARJETAS -->
+<div class="section-cards">
+  <p class="section-title">¿Qué necesitas tramitar?</p>
+  <h2 class="section-heading">Selecciona un trámite para ver cómo hacerlo</h2>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let tramite of tramites">
+      <div class="tramite-card"
+           [class.activa]="tramiteSeleccionado?.id === tramite.id"
+           (click)="seleccionarTramite(tramite)">
+        <div class="card-icon-wrap {{ tramite.iconClass }}">
+          <i class="bi {{ tramite.icono }}"></i>
+        </div>
+        <div class="card-title">{{ tramite.nombre }}</div>
+        <div class="card-desc">{{ tramite.descripcion }}</div>
+        <div class="card-arrow"><i class="bi bi-arrow-right"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEASER PANEL -->
+  <div class="teaser-panel"id="teaserPanel" *ngIf="tramiteSeleccionado">
+
+    <div class="teaser-header">
+      <h5>
+        <i class="bi {{ tramiteSeleccionado.icono }}"></i>
+        {{ tramiteSeleccionado.nombre }}
+      </h5>
+      <span class="teaser-badge">Vista previa</span>
+    </div>
+
+    <div class="teaser-body">
+
+      <!-- DATO CURIOSO -->
+      <div class="dato-curioso">
+        <div class="dato-emoji">{{ tramiteSeleccionado.emoji }}</div>
+        <div class="dato-content">
+          <div class="dato-label">💡 ¿Sabías que...?</div>
+          <div class="dato-texto" [innerHTML]="tramiteSeleccionado.dato"></div>
+        </div>
+      </div>
+
+      <!-- PASOS -->
+      <div class="steps-list">
+        <div class="step-item" *ngFor="let paso of tramiteSeleccionado.pasos; let i = index">
+          <div class="step-num">{{ i + 1 }}</div>
+          <div class="step-text" [class.step-blur]="!paso.visible">{{ paso.texto }}</div>
+          <i class="bi bi-lock-fill step-lock" *ngIf="!paso.visible"></i>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="teaser-cta">
+        <p>🔒 Regístrate gratis para ver el tutorial completo con
+          <span>documentos exactos, tiempos de espera y costos actualizados</span>
+        </p>
+        <button class="btn-cta" (click)="irARegistro()">
+          <i class="bi bi-rocket-takeoff-fill"></i>
+          Quiero ver el tutorial completo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

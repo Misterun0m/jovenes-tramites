@@ -1,0 +1,57 @@
+<div class="otp-page">
+
+  <div class="otp-card">
+
+    <h2>Verifica tu cuenta</h2>
+
+    <p class="subtitle">
+      Introduce el código enviado a
+      <strong>{{correo}}</strong>
+    </p>
+
+    <!-- INPUTS CODIGO -->
+
+    <div class="otp-inputs">
+
+      <input maxlength="1" #c1 (keyup)="moveNext($event,c2)">
+      <input maxlength="1" #c2 (keyup)="moveNext($event,c3)">
+      <input maxlength="1" #c3 (keyup)="moveNext($event,c4)">
+      <input maxlength="1" #c4 (keyup)="moveNext($event,c5)">
+      <input maxlength="1" #c5 (keyup)="moveNext($event,c6)">
+      <input maxlength="1" #c6 (keyup)="updateCodigo()">
+
+    </div>
+
+    <!-- BOTON -->
+
+    <button
+      class="btn-verificar"
+      (click)="verificarCodigo()"
+      [disabled]="loading"
+    >
+
+      <span *ngIf="!loading">
+        Verificar
+      </span>
+
+      <span *ngIf="loading">
+        <span class="spinner-border spinner-border-sm"></span>
+        Verificando
+      </span>
+
+    </button>
+
+    <!-- ERROR -->
+
+   
+
+    <!-- REENVIAR -->
+
+    <p class="reenviar">
+      ¿No recibiste el código?
+      <span (click)="reenviarCodigo()">Reenviar</span>
+    </p>
+
+  </div>
+
+</div>

@@ -1,0 +1,119 @@
+<div class="reg-bg d-flex align-items-center justify-content-center min-vh-100 p-3">
+
+  <div class="reg-container">
+    <div class="row g-0">
+
+      <!-- LADO IZQUIERDO -->
+      <div class="col-md-5 reg-left d-none d-md-flex flex-column align-items-center justify-content-center gap-3 text-center">
+
+        <span class="reg-badge">Nueva cuenta</span>
+
+        <div class="reg-icon-wrap">
+          <i class="bi bi-person-plus-fill"></i>
+        </div>
+
+        <h2>Comienza tu<br>nueva etapa</h2>
+        <p class="reg-sub">Crea tu cuenta y accede a todos los tutoriales de trámites</p>
+
+        <div class="d-flex flex-column gap-2 w-100">
+          <div class="reg-pill"><i class="bi bi-check-circle"></i> Registro gratuito</div>
+          <div class="reg-pill"><i class="bi bi-lock"></i> Tus datos están seguros</div>
+          <div class="reg-pill"><i class="bi bi-rocket-takeoff"></i> Acceso inmediato</div>
+        </div>
+
+        <p class="reg-login-link">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login" class="reg-link-white">Inicia sesión</a>
+        </p>
+
+      </div>
+
+      <!-- LADO DERECHO -->
+      <div class="col-md-7 reg-right d-flex flex-column justify-content-center">
+
+        <p class="reg-greeting">Únete ahora</p>
+        <h3 class="mb-1">Crear cuenta</h3>
+        <p class="reg-subtitle mb-4">Completa los datos para registrarte</p>
+
+        <!-- Nombre -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-1">Nombre completo</label>
+          <div class="field-inner">
+            <i class="bi bi-person icon"></i>
+            <input type="text" [(ngModel)]="usuario.user_nom" placeholder="Tu nombre completo">
+          </div>
+        </div>
+
+        <!-- Sexo -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-2">Sexo biológico</label>
+          <div class="sex-options">
+            <label class="sex-option" [class.selected]="usuario.user_sex === 'Femenino'">
+              <input type="radio" [(ngModel)]="usuario.user_sex" name="user_sex" value="Femenino">
+              <i class="bi bi-gender-female"></i>
+              <span>Femenino</span>
+            </label>
+            <label class="sex-option" [class.selected]="usuario.user_sex === 'Masculino'">
+              <input type="radio" [(ngModel)]="usuario.user_sex" name="user_sex" value="Masculino">
+              <i class="bi bi-gender-male"></i>
+              <span>Masculino</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Fecha nacimiento -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-1">Fecha de nacimiento</label>
+          <div class="field-inner">
+            <i class="bi bi-calendar3 icon"></i>
+            <input type="date" [(ngModel)]="usuario.fecha_nacimiento">
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div class="field-group mb-3">
+          <label class="field-label mb-1">Correo electrónico</label>
+          <div class="field-inner">
+            <i class="bi bi-envelope icon"></i>
+            <input type="email" [(ngModel)]="usuario.user_correo" placeholder="tucorreo@ejemplo.com">
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="field-group mb-4">
+          <label class="field-label mb-1">Contraseña</label>
+          <div class="field-inner">
+            <i class="bi bi-lock icon"></i>
+            <input [type]="showPassword ? 'text' : 'password'"
+                   [(ngModel)]="usuario.user_pass"
+                   placeholder="Mínimo 6 caracteres">
+            <button type="button" class="toggle-pass" (click)="showPassword = !showPassword; $event.stopPropagation()">
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botón registrar -->
+        <button type="button"
+                class="btn-registrar"
+                [disabled]="cargando"
+                (click)="registrar($event)">
+          <span *ngIf="!cargando">
+            <i class="bi bi-rocket-takeoff-fill"></i> Registrarse
+          </span>
+          <span *ngIf="cargando">
+            <i class="bi bi-hourglass-split"></i> Registrando...
+          </span>
+        </button>
+
+        <!-- Link móvil -->
+        <p class="text-center mt-3 d-md-none" style="font-size:13px; color:#8a8a9a;">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login" style="color:#7b2cbf; font-weight:600; text-decoration:none;">Inicia sesión</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+</div>

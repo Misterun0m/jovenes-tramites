@@ -1,0 +1,255 @@
+<!-- pantalla_usuario.html -->
+<div class="pu-wrapper">
+
+  <!-- Sidebar izquierdo -->
+  <aside class="pu-sidebar">
+    <div class="pu-logo">
+      <span class="pu-logo-icon">🚀</span>
+      <span class="pu-logo-text">Trámites 18+</span>
+    </div>
+
+    <div class="pu-avatar-block">
+      <!-- Avatar dinámico según sexo -->
+      <div class="pu-avatar"
+           [class.avatar-fem]="usuario.user_sex === 'Femenino'"
+           [class.avatar-mas]="usuario.user_sex === 'Masculino'"
+           [class.avatar-nd]="!usuario.user_sex">
+        @if (usuario.user_sex === 'Femenino') {
+          <i class="bi bi-person-fill-check"></i>
+        } @else if (usuario.user_sex === 'Masculino') {
+          <i class="bi bi-person-fill"></i>
+        } @else {
+          <i class="bi bi-person-fill-exclamation"></i>
+        }
+      </div>
+
+      <div class="pu-name-wrap">
+        <span class="pu-username">{{ usuario.user_nom || 'Sin nombre' }}</span>
+        <span class="pu-email">{{ usuario.user_correo }}</span>
+        <!-- Badge de sexo debajo del nombre -->
+        <span class="pu-sex-badge"
+              [class.badge-fem]="usuario.user_sex === 'Femenino'"
+              [class.badge-mas]="usuario.user_sex === 'Masculino'"
+              [class.badge-nd]="!usuario.user_sex">
+          @if (usuario.user_sex === 'Femenino') {
+            <i class="bi bi-gender-female"></i> Femenino
+          } @else if (usuario.user_sex === 'Masculino') {
+            <i class="bi bi-gender-male"></i> Masculino
+          } @else {
+            <i class="bi bi-question-circle"></i> Sin especificar
+          }
+        </span>
+      </div>
+
+      <button class="pu-edit-btn" (click)="abrirEdicion()">
+        ✏️ Editar perfil
+      </button>
+    </div>
+
+    <nav class="pu-nav">
+      <div class="pu-nav-item" [class.active]="vistaActual === 'tramites'" (click)="vistaActual = 'tramites'">
+        <span class="nav-icon">📋</span>
+        <span>Mis Trámites</span>
+      </div>
+      <div class="pu-nav-item" [class.active]="vistaActual === 'perfil'" (click)="vistaActual = 'perfil'">
+        <span class="nav-icon">👤</span>
+        <span>Mi Perfil</span>
+      </div>
+      <div class="pu-nav-item" (click)="irTutorial()">
+        <span class="nav-icon">🎓</span>
+        <span>Tutorial</span>
+      </div>
+    </nav>
+
+    <button class="pu-logout-btn" (click)="cerrarSesion()">
+      <span>⬅️</span> Cerrar sesión
+    </button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="pu-main">
+
+    <!-- ══════════════ VISTA: TRÁMITES ══════════════ -->
+    @if (vistaActual === 'tramites') {
+      <header class="pu-header">
+        <div>
+          <h1 class="pu-title">Mis Trámites</h1>
+          <p class="pu-subtitle">Gestiona el estado de tus trámites en un solo lugar</p>
+        </div>
+        <div class="pu-stats">
+          <div class="stat-chip">
+            <span class="stat-num">{{ tramites.length }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-chip accent">
+            <span class="stat-num">{{ tramitesFinalizados }}</span>
+            <span class="stat-label">Finalizados</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="pu-tramites-grid">
+        @if (tramites.length === 0) {
+          <div class="pu-empty">
+            <div class="empty-icon">📭</div>
+            <p>Aún no tienes trámites registrados</p>
+            <button class="btn-explore" (click)="irTutorial()">Explorar trámites</button>
+          </div>
+        }
+
+        @for (t of tramites; track t.user_idtramite) {
+          <div class="tramite-card"
+               [class.finalizado]="t.estado_tramite === 'Finalizado'"
+               [class.en-proceso]="t.estado_tramite === 'En proceso'">
+            <div class="tc-top">
+              <div class="tc-icon">{{ getTramiteIcon(t.tram_tip) }}</div>
+              <div class="tc-info">
+                <h3 class="tc-tipo">{{ t.tram_tip }}</h3>
+                <span class="tc-badge" [class]="getBadgeClass(t.estado_tramite)">
+                  {{ t.estado_tramite }}
+                </span>
+              </div>
+            </div>
+
+            @if (t.tram_saber) {
+              <div class="tc-saber">
+                <p>{{ t.tram_saber }}</p>
+              </div>
+            }
+
+            <div class="tc-footer">
+              <label class="tc-select-label">Actualizar estado:</label>
+              <select [(ngModel)]="t.estado_tramite"
+                      (change)="cambiarEstado(t, t.estado_tramite)"
+                      class="tc-select">
+                <option value="Pendiente">⏳ Pendiente</option>
+                <option value="En proceso">🔄 En proceso</option>
+                <option value="Finalizado">✅ Finalizado</option>
+              </select>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ══════════════ VISTA: PERFIL ══════════════ -->
+    @if (vistaActual === 'perfil') {
+      <header class="pu-header">
+        <div>
+          <h1 class="pu-title">Mi Perfil</h1>
+          <p class="pu-subtitle">Actualiza tu información personal</p>
+        </div>
+      </header>
+
+      <div class="pu-perfil-card">
+
+        <!-- Nombre -->
+        <div class="perfil-field">
+          <label class="perfil-label">Nombre completo</label>
+          <div class="perfil-input-wrap">
+            <span class="perfil-icon">👤</span>
+            <input type="text"
+                   [(ngModel)]="usuarioEdit.user_nom"
+                   [readonly]="!editing"
+                   class="perfil-input"
+                   [class.editable]="editing"
+                   placeholder="Tu nombre completo">
+          </div>
+        </div>
+
+        <!-- Sexo -->
+        <div class="perfil-field">
+          <label class="perfil-label">Sexo biológico</label>
+          @if (editing) {
+            <div class="sex-options">
+              <label class="sex-option" [class.selected]="usuarioEdit.user_sex === 'Femenino'">
+                <input type="radio" [(ngModel)]="usuarioEdit.user_sex" name="user_sex" value="Femenino">
+                <i class="bi bi-gender-female"></i>
+                <span>Femenino</span>
+              </label>
+              <label class="sex-option" [class.selected]="usuarioEdit.user_sex === 'Masculino'">
+                <input type="radio" [(ngModel)]="usuarioEdit.user_sex" name="user_sex" value="Masculino">
+                <i class="bi bi-gender-male"></i>
+                <span>Masculino</span>
+              </label>
+            </div>
+          } @else {
+            <div class="perfil-input-wrap">
+              @if (usuarioEdit.user_sex === 'Femenino') {
+                <i class="bi bi-gender-female perfil-icon" style="color:#c026d3"></i>
+              } @else if (usuarioEdit.user_sex === 'Masculino') {
+                <i class="bi bi-gender-male perfil-icon" style="color:#2563eb"></i>
+              } @else {
+                <i class="bi bi-question-circle perfil-icon" style="color:#9ca3af"></i>
+              }
+              <input type="text"
+                     [value]="usuarioEdit.user_sex || 'Sin especificar'"
+                     readonly
+                     class="perfil-input">
+            </div>
+          }
+        </div>
+
+        <!-- Fecha de nacimiento -->
+        <div class="perfil-field">
+          <label class="perfil-label">Fecha de nacimiento</label>
+          <div class="perfil-input-wrap">
+            <span class="perfil-icon">🎂</span>
+            <input type="date"
+                   [(ngModel)]="usuarioEdit.fecha_nacimiento"
+                   [readonly]="!editing"
+                   class="perfil-input"
+                   [class.editable]="editing">
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div class="perfil-field">
+          <label class="perfil-label">
+            Correo electrónico
+            <span class="perfil-badge-readonly">No editable</span>
+          </label>
+          <div class="perfil-input-wrap">
+            <span class="perfil-icon">✉️</span>
+            <input type="email"
+                   [value]="usuarioEdit.user_correo"
+                   readonly
+                   class="perfil-input readonly">
+          </div>
+        </div>
+
+        <!-- Miembro desde -->
+        <div class="perfil-field">
+          <label class="perfil-label">Miembro desde</label>
+          <div class="perfil-input-wrap">
+            <span class="perfil-icon">📅</span>
+            <input type="text"
+                   [value]="usuarioEdit.created_at | date:'dd/MM/yyyy'"
+                   readonly
+                   class="perfil-input readonly">
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="perfil-actions">
+          @if (!editing) {
+            <button class="btn-perfil-edit" (click)="abrirEdicion()">
+              ✏️ Editar información
+            </button>
+          } @else {
+            <button class="btn-perfil-save" (click)="guardarCambios()">
+              💾 Guardar cambios
+            </button>
+            <button class="btn-perfil-cancel" (click)="cancelarEdicion()">
+              ✖ Cancelar
+            </button>
+          }
+        </div>
+
+      </div>
+    }
+
+  </main>
+  
+</div>
+<app-chat-flotante />

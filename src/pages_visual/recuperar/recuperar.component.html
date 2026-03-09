@@ -1,0 +1,44 @@
+<div class="recovery-page">
+
+  <div class="recovery-card shadow-lg">
+
+    <div class="icon-area">
+      <div class="mail-circle">
+        <i class="bi bi-envelope-fill"></i>
+      </div>
+    </div>
+
+    <h2>Recuperar contraseña</h2>
+
+    <p class="subtitle">
+      Ingresa tu correo para recibir el código de recuperación
+    </p>
+
+  
+
+    <input
+      type="email"
+      class="form-control"
+      placeholder="correo@ejemplo.com"
+      [(ngModel)]="correo"
+    />
+
+    <button
+      class="btn btn-recovery"
+      (click)="enviarCodigo()"
+      [disabled]="loading"
+    >
+
+      <span *ngIf="!loading">Enviar código</span>
+
+      <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+
+    </button>
+
+    <a routerLink="/login" class="back-link">
+      Volver al login
+    </a>
+
+  </div>
+
+</div>
