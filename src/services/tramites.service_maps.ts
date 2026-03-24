@@ -59,7 +59,7 @@ type ApiResp<T> = ApiOk<T> | ApiError;
 @Injectable({ providedIn: 'root' })
 export class TramitesService {
 
-  private readonly BASE = 'http://localhost/backend';
+  private readonly BASE = 'https://backend-production-5b65.up.railway.app';
 
   constructor(private http: HttpClient) {}
 

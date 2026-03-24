@@ -26,7 +26,7 @@ export interface ApiResponse {
 })
 export class AuthBackendService {
 
-  private API_URL = 'http://localhost/backend';
+  private API_URL = 'https://backend-production-5b65.up.railway.app';
 
   constructor(private http: HttpClient) {}
 

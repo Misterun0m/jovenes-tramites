@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TramiteService {
 
-  private apiUrl = 'http://localhost/backend/tramite.php'; // Cambia a tu ruta real del PHP
+  private apiUrl = 'https://backend-production-5b65.up.railway.app/tramite.php';
 
   constructor(private http: HttpClient) {}
 
