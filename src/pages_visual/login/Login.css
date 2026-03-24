@@ -311,8 +311,6 @@ body, .login-bg * { font-family: 'Sora', sans-serif; }
 #googleButton iframe {
   border-radius: 14px !important;
 }
-/* Pega esto al final de tu login.css */
-
 .link-back-home {
   color: rgba(255,255,255,0.7);
   font-size: 13px;

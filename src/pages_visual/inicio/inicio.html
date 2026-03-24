@@ -1,10 +1,11 @@
 <!-- NAVBAR -->
 <nav class="navbar-custom">
   <div class="navbar-brand">
-    <div class="brand-icon"><i class="bi bi-rocket-takeoff-fill"></i></div>
+    <div class="brand-icon">
+      <i  id="huella"   class="bi bi-fingerprint"></i></div>
     <div class="brand-name">
-      Trámites 18+
-      <span>Portal Oficial</span>
+ Inicio Ciudadano
+       <span>Portal de Ayuda</span>
     </div>
   </div>
   <div class="nav-btns">
@@ -15,7 +16,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><i class="bi bi-shield-check"></i> Plataforma oficial y segura</div>
+  <div class="hero-badge"><i class="bi bi-shield-check"></i> Guia de tramites segura </div>
   <h1>Tu guía para los <em>trámites</em><br>más importantes de tu vida</h1>
   <p>Todo lo que necesitas saber para comenzar tu vida adulta, en un solo lugar.</p>
   <div class="hero-stats">
@@ -53,7 +54,7 @@
         <i class="bi {{ tramiteSeleccionado.icono }}"></i>
         {{ tramiteSeleccionado.nombre }}
       </h5>
-      <span class="teaser-badge">Vista previa</span>
+   
     </div>
 
     <div class="teaser-body">
@@ -62,7 +63,7 @@
       <div class="dato-curioso">
         <div class="dato-emoji">{{ tramiteSeleccionado.emoji }}</div>
         <div class="dato-content">
-          <div class="dato-label">💡 ¿Sabías que...?</div>
+          <div class="dato-label"> ¿Sabías que...?</div>
           <div class="dato-texto" [innerHTML]="tramiteSeleccionado.dato"></div>
         </div>
       </div>
@@ -78,7 +79,7 @@
 
       <!-- CTA -->
       <div class="teaser-cta">
-        <p>🔒 Regístrate gratis para ver el tutorial completo con
+        <p> Regístrate gratis para ver el tutorial completo con
           <span>documentos exactos, tiempos de espera y costos actualizados</span>
         </p>
         <button class="btn-cta" (click)="irARegistro()">

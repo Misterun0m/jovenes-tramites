@@ -1,0 +1,148 @@
+<nav class="navbar navbar-light bg-white shadow-sm fixed-top" style="height: 60px;">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+    
+      <img src="/img/logo.png" width="35" alt="Logo">
+      <span class="fw-bold" style="-webkit-text-fill-color: #000;">Trámites 18+</span>
+    </div>
+  </div>
+</nav>
+
+<div class="main-wrapper">
+  <div class="card detalle-card animate-card border-0">
+
+    <!-- HEADER -->
+    <div class="header-fijo text-center p-3">
+      <h3 class="titulo-llamativo mb-0">Ubica tu sede</h3>
+      <div class="badges-row mt-2 d-flex justify-content-center gap-2 flex-wrap">
+        <span class="badge-pasos">
+          <i class="bi bi-list-check me-1"></i>Paso 4 de 5
+        </span>
+   
+      </div>
+    </div>
+
+    <hr class="linea-pro-scroll">
+
+    <!-- CUERPO: MAPA + PANEL -->
+    <div class="cuerpo-scroll">
+
+      <!-- MAPA -->
+      <div class="map-wrapper">
+        <div id="google-map"></div>
+
+        <!-- Overlay mientras carga -->
+        <div *ngIf="cargandoUbicacion || cargandoModulos" class="map-overlay">
+          <div class="spinner-border text-purple" role="status"></div>
+          <span class="mt-2 small" style="color:#6b7280; -webkit-text-fill-color:#6b7280;">
+            {{ cargandoUbicacion ? 'Obteniendo ubicación…' : 'Cargando módulos…' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- PANEL LATERAL -->
+      <div class="panel-modulos">
+
+        <!-- Error ubicación -->
+        <div *ngIf="errorUbicacion && !cargandoUbicacion" class="estado-panel estado-error">
+          <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+          <span class="small" style="-webkit-text-fill-color:#92400e;">{{ errorUbicacion }}</span>
+          <div class="mt-2 d-flex gap-2 flex-wrap">
+            <button class="btn btn-sm btn-purple rounded-pill px-3" (click)="solicitarUbicacion()">
+              <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+            </button>
+            <button class="btn btn-sm btn-outline-purple rounded-pill px-3" (click)="cargarSinUbicacion()">
+              Ver todos
+            </button>
+          </div>
+        </div>
+
+        <!-- Título panel -->
+        <div class="panel-titulo" *ngIf="!cargandoUbicacion && modulosFiltrados.length > 0">
+          <i class="bi bi-geo-alt-fill text-purple me-1"></i>
+          <span class="small fw-semibold">
+            {{ ubicacionObtenida ? 'Módulos más cercanos' : 'Módulos disponibles' }}
+          </span>
+        </div>
+
+        <!-- Lista de módulos -->
+        <div
+          *ngFor="let modulo of modulosFiltrados; let i = index"
+          class="modulo-item"
+          [class.modulo-seleccionado]="moduloSeleccionado?.modulo_id === modulo.modulo_id"
+          [class.modulo-mas-cercano]="i === 0 && ubicacionObtenida"
+          (click)="seleccionarModulo(modulo)"
+        >
+          <span *ngIf="i === 0 && ubicacionObtenida" class="badge-cercano mb-1 d-block">
+            <i class="bi bi-star-fill me-1"></i>Más cercano
+          </span>
+
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="modulo-nombre">{{ modulo.nombre }}</div>
+            <div *ngIf="modulo.distancia_km != null" class="modulo-distancia ms-2">
+              {{ formatDist(modulo.distancia_km) }}
+            </div>
+          </div>
+
+          <div class="modulo-direccion mt-1">
+            <i class="bi bi-pin-map me-1"></i>{{ modulo.direccion }}
+          </div>
+          <div class="modulo-horario">
+            <i class="bi bi-clock me-1"></i>{{ modulo.horario }}
+          </div>
+
+          <div *ngIf="moduloSeleccionado?.modulo_id === modulo.modulo_id" class="check-icon">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+
+        <!-- Sin módulos -->
+        <div *ngIf="!cargandoModulos && modulosFiltrados.length === 0" class="estado-panel mt-2">
+          <i class="bi bi-info-circle me-2" style="-webkit-text-fill-color:#9ca3af;"></i>
+          <span class="small" style="-webkit-text-fill-color:#9ca3af;">No hay módulos para este trámite.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="linea-pro-scroll">
+
+    <!-- FOOTER -->
+    <div class="footer-fijo text-center p-3">
+
+      <div *ngIf="moduloSeleccionado" class="modulo-confirmado mb-2">
+        <i class="bi bi-check-circle-fill me-1" style="color:#16a34a; -webkit-text-fill-color:#16a34a;"></i>
+        <span class="small fw-semibold">{{ moduloSeleccionado.nombre }}</span>
+      </div>
+
+      <div *ngIf="!moduloSeleccionado" class="mb-2">
+        <i class="bi bi-hand-index me-1" style="-webkit-text-fill-color:#6b7280;"></i>
+        <span class="small" style="-webkit-text-fill-color:#6b7280;">Selecciona un módulo</span>
+      </div>
+
+       <div class="d-flex justify-content-center mb-3">
+  <button
+    type="button"
+    class="btn btn-lg rounded-pill px-5 py-2"
+    [disabled]="!moduloSeleccionado"
+    (click)="irSiguiente()"
+    style="background: linear-gradient(135deg, #7c3aed, #9333ea); color: #fff; border: none; font-weight: 600; box-shadow: 0 4px 14px rgba(124,58,237,0.45);"
+  >
+    <i class="bi bi-check2-circle me-2"></i>Confirmar Sede
+  </button>
+</div>
+    
+
+      <div class="d-flex justify-content-center gap-2">
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot active"></span>
+        <span class="progress-dot"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<app-chat-flotante />

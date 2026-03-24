@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class UsuarioService {
 
   private registroUrl = 'http://localhost/backend/registro.php';
-  private usuarioUrl  = 'http://localhost/backend/usuario.php'; // ← archivo separado para perfil y trámites
+  private usuarioUrl  = 'http://localhost/backend/usuario.php';
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +31,15 @@ export class UsuarioService {
     return this.http.post<any>(`${this.usuarioUrl}?action=actualizar&user_id=${userId}`, data, { withCredentials: true });
   }
 
+  // ── Cambio de contraseña ──────────────────────────────
+  cambiarPassword(userId: number, passwordActual: string, passwordNueva: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.usuarioUrl}?action=cambiar_password&user_id=${userId}`,
+      { password_actual: passwordActual, password_nueva: passwordNueva },
+      { withCredentials: true }
+    );
+  }
+
   // ── Trámites del usuario ──────────────────────────────
   getTramitesUsuario(userId: number): Observable<any> {
     return this.http.get<any>(`${this.usuarioUrl}?action=tramites&user_id=${userId}`, { withCredentials: true });
@@ -38,6 +47,16 @@ export class UsuarioService {
 
   updateEstadoTramite(user_idtramite: number, estado_tramite: string): Observable<any> {
     return this.http.post<any>(`${this.usuarioUrl}?action=actualizar_estado`, { user_idtramite, estado_tramite }, { withCredentials: true });
+  }
+
+  // ── Requisitos de un trámite ──────────────────────────
+  getRequisitos(tramId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.usuarioUrl}?action=requisitos&tram_id=${tramId}`, { withCredentials: true });
+  }
+
+  // ── Eliminar cuenta ───────────────────────────────────
+  eliminarCuenta(userId: number): Observable<any> {
+    return this.http.delete<any>(`${this.usuarioUrl}?action=eliminar&user_id=${userId}`, { withCredentials: true });
   }
 
   // ── Logout ────────────────────────────────────────────

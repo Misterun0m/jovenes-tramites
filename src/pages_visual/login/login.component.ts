@@ -17,7 +17,6 @@ import {
   templateUrl: './login.html',
   styleUrls: ['./Login.css'],
   animations: [
-    // Card completa: fade + sube + escala leve
     trigger('cardEntrance', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(40px) scale(0.97)' }),
@@ -26,8 +25,6 @@ import {
         )
       ])
     ]),
-
-    // Lado izquierdo: fade + viene desde la izquierda
     trigger('leftEntrance', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateX(-30px)' }),
@@ -36,8 +33,6 @@ import {
         )
       ])
     ]),
-
-    // Formulario: cada elemento entra escalonado
     trigger('formStagger', [
       transition(':enter', [
         query('.field-group, .greeting, h3, .subtitle, .d-flex, .btn-login, .divider-line, .divider-text, #googleButton', [
@@ -57,17 +52,19 @@ export class LoginComponent implements AfterViewInit {
   private readonly CLIENT_ID =
     '153731151960-0u024rio3rb5tcposlo188f9php8mhcc.apps.googleusercontent.com';
 
-  correo: string = '';
-  password: string = '';
-  isLoading: boolean = false;
+  private readonly SESSION_KEY = 'usuarioSesion';
+
+  correo:       string  = '';
+  password:     string  = '';
+  isLoading:    boolean = false;
   showPassword: boolean = false;
 
   constructor(
     private googleAuth: GoogleAuthService,
-    private backend: AuthBackendService,
-    private router: Router,
-    private zone: NgZone,
-    private cdr: ChangeDetectorRef
+    private backend:    AuthBackendService,
+    private router:     Router,
+    private zone:       NgZone,
+    private cdr:        ChangeDetectorRef
   ) {}
 
   ngAfterViewInit(): void {
@@ -77,60 +74,122 @@ export class LoginComponent implements AfterViewInit {
     this.googleAuth.renderButton('googleButton');
   }
 
-  /* =========================
-     LOGIN NORMAL
-  ========================= */
-  loginNormal(): void {
-    if (this.isLoading) return;
+/* =========================
+   LOGIN NORMAL
+========================= */
+loginNormal(): void {
+  if (this.isLoading) return;
 
-    if (!this.correo.trim() || !this.password.trim()) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Campos obligatorios',
-        text: 'Ingresa tu correo y contraseña',
-        confirmButtonColor: '#7b2cbf'
-      });
-      return;
-    }
+  const correoLimpio   = this.correo.trim();
+  // NO hacemos trim() a la contraseña — la tomamos exactamente como se escribió
+  const passwordExacta = this.password;
 
-    this.isLoading = true;
-    this.cdr.detectChanges();
+  // ── 1. Campos vacíos ──────────────────────────────────────────
+  if (!correoLimpio || !passwordExacta) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obligatorios',
+      text: 'Ingresa tu correo y contraseña.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
 
-    this.backend.loginNormal(this.correo.trim(), this.password.trim())
-      .pipe(finalize(() => {
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }))
-      .subscribe({
-        next: (res: ApiResponse) => {
-          if (res.success) {
-            if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
-            this.navegarSegunDatos(res.user);
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Credenciales incorrectas',
-              text: res.message || 'Verifica tu correo o contraseña',
-              confirmButtonColor: '#7b2cbf'
-            });
-          }
-        },
-        error: (err) => {
-          console.error('Error HTTP:', err);
-          let mensaje = 'Error inesperado';
-          if (err.status === 0) mensaje = 'No hay conexión con el servidor';
-          else if (err.status === 401) mensaje = 'Correo o contraseña incorrectos';
-          else if (err.status === 500) mensaje = 'Error interno del servidor';
+  // ── 2. Formato de correo ───────────────────────────────────────
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(correoLimpio)) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Correo inválido',
+      text: 'Ingresa un correo electrónico con formato válido.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
 
+  // ── 3. Espacio al inicio o al final de la contraseña ──────────
+  if (passwordExacta !== passwordExacta.trim()) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Contraseña con espacios',
+      text: 'Tu contraseña no debe comenzar ni terminar con espacios.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
+
+  // ── 4. Espacios consecutivos dentro de la contraseña ──────────
+  if (/\s{2,}/.test(passwordExacta)) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Contraseña inválida',
+      text: 'Tu contraseña no debe contener espacios consecutivos.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
+
+  // ── 5. Solo espacios (contraseña en blanco disfrazada) ─────────
+  if (!passwordExacta.trim()) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Contraseña vacía',
+      text: 'La contraseña no puede estar compuesta solo de espacios.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
+
+  // ── 6. Longitud mínima ─────────────────────────────────────────
+  if (passwordExacta.trim().length < 6) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Contraseña muy corta',
+      text: 'La contraseña debe tener al menos 6 caracteres.',
+      confirmButtonColor: '#7b2cbf'
+    });
+    return;
+  }
+
+  // ── Todo OK: llamar al backend con la contraseña EXACTA ────────
+  this.isLoading = true;
+  this.cdr.detectChanges();
+
+  this.backend.loginNormal(correoLimpio, passwordExacta)
+    .pipe(finalize(() => {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }))
+    .subscribe({
+      next: (res: ApiResponse) => {
+        if (res.success) {
+          if (res.user) localStorage.setItem(this.SESSION_KEY, JSON.stringify(res.user));
+          this.navegarSegunDatos(res.user);
+        } else {
           Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: mensaje,
+            title: 'Credenciales incorrectas',
+            text: res.message || 'Verifica tu correo o contraseña.',
             confirmButtonColor: '#7b2cbf'
           });
         }
-      });
-  }
+      },
+      error: (err) => {
+        console.error('Error HTTP:', err);
+        let mensaje = 'Error inesperado. Intenta de nuevo.';
+        if (err.status === 0)    mensaje = 'Sin conexión con el servidor.';
+        else if (err.status === 401) mensaje = 'Correo o contraseña incorrectos.';
+        else if (err.status === 500) mensaje = 'Error interno del servidor.';
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: mensaje,
+          confirmButtonColor: '#7b2cbf'
+        });
+      }
+    });
+}
 
   /* =========================
      LOGIN GOOGLE
@@ -159,7 +218,7 @@ export class LoginComponent implements AfterViewInit {
       .subscribe({
         next: (res: ApiResponse) => {
           if (res.success) {
-            if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
+            if (res.user) localStorage.setItem(this.SESSION_KEY, JSON.stringify(res.user));
             this.navegarSegunDatos(res.user);
           } else {
             Swal.fire({
@@ -182,17 +241,21 @@ export class LoginComponent implements AfterViewInit {
   }
 
   /* =========================
-     REDIRECCION SEGUN DATOS
+     REDIRECCIÓN SEGÚN DATOS
   ========================= */
   private navegarSegunDatos(user: any): void {
-    const userSex  = user?.user_sex         ?? '';
-    const fechaNac = user?.fecha_nacimiento ?? '';
+    // FIX PRINCIPAL: user_sex y fecha_nacimiento pueden ser null,
+    // undefined o string vacío — se normaliza todo antes de .trim()
+    const userSex  = user?.user_sex          ?? '';
+    const fechaNac = user?.fecha_nacimiento  ?? '';
 
-    const faltaSexo  = !userSex.trim();
-    const faltaFecha = !fechaNac.trim();
+    // FIX: typeof string antes de llamar .trim() para evitar crash con null
+    const faltaSexo  = typeof userSex  !== 'string' || !userSex.trim();
+    const faltaFecha = typeof fechaNac !== 'string' || !fechaNac.trim();
     const faltaDatos = faltaSexo || faltaFecha;
 
-    const userGuardado = localStorage.getItem('user');
+    // Verificar que se guardó correctamente antes de navegar
+    const userGuardado = localStorage.getItem(this.SESSION_KEY);
     if (!userGuardado) return;
 
     if (faltaDatos) {
@@ -230,9 +293,8 @@ export class LoginComponent implements AfterViewInit {
         showConfirmButton: false,
         allowOutsideClick: false
       }).then(() => {
-        this.zone.run(() => this.router.navigate(['/tutorial-tramite']));
+        this.zone.run(() => this.router.navigate(['/principal-tramites']));
       });
     }
   }
 }
-

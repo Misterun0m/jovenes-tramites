@@ -1,0 +1,81 @@
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav class="navbar-custom">
+  <button class="navbar-back" (click)="irAtras()">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+  <img src="/img/logo.png" class="navbar-logo" alt="logo">
+  <span class="navbar-brand-text">Trámites 18+</span>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="hero-inner">
+    <div class="paso-badge">
+      <span class="paso-badge-dot"></span>
+      <span class="paso-badge-text">Paso 2 de 5 — Descripción del trámite</span>
+    </div>
+    <h1 class="hero-title">{{ tramite?.nombre || 'Detalle del trámite' }}</h1>
+    <p class="hero-subtitle">Conoce en qué consiste y por qué es importante para ti.</p>
+  </div>
+</section>
+
+<!-- ─── CONTENIDO ─────────────────────────────────── -->
+<div class="main-content">
+
+  <!-- Banner con imagen y estado -->
+  <div class="banner-card">
+    <img [src]="getImagen(tramite?.nombre)" [alt]="tramite?.nombre" class="banner-img">
+    <div class="banner-footer">
+      <div class="banner-icon-wrap">
+        <img [src]="getImagen(tramite?.nombre)" [alt]="tramite?.nombre">
+      </div>
+      <span class="banner-nombre">{{ tramite?.nombre }}</span>
+      <span class="banner-estado" [ngClass]="getEstadoClass(tramite?.estado_tramite)">
+        {{ tramite?.estado_tramite || 'Pendiente' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Descripción e importancia -->
+  <div class="info-grid">
+    <div class="info-box">
+      <div class="info-box-icon">
+        <i class="bi bi-file-text"></i>
+      </div>
+      <p class="info-box-title">Descripción</p>
+      <p class="info-box-text">{{ tramite?.descripcion || 'Sin descripción disponible.' }}</p>
+    </div>
+    <div class="info-box">
+      <div class="info-box-icon">
+        <i class="bi bi-star"></i>
+      </div>
+      <p class="info-box-title">¿Por qué es importante?</p>
+      <p class="info-box-text">{{ getImportancia(tramite?.nombre) }}</p>
+    </div>
+  </div>
+
+  <!-- Sabías que / info útil -->
+  <div class="sabias-box" *ngIf="tramite?.info_util">
+    <div class="sabias-header">
+      <i class="bi bi-lightbulb-fill"></i>
+      <span class="sabias-title">Lo que debes saber</span>
+    </div>
+    <p class="sabias-text">{{ tramite?.info_util }}</p>
+  </div>
+
+  <!-- Footer con pasos y botón -->
+  <div class="footer-card">
+    <div class="footer-steps">
+      <span class="step-dot"></span>
+      <span class="step-dot active"></span>
+      <span class="step-dot"></span>
+      <span class="step-dot"></span>
+      <span class="step-dot"></span>
+    </div>
+    <button class="btn-siguiente" (click)="continuarProceso()">
+      Siguiente <span class="arrow">→</span>
+    </button>
+  </div>
+
+</div>
+<app-chat-flotante />

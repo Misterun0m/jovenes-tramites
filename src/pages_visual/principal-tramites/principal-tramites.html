@@ -1,0 +1,161 @@
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav class="navbar-custom">
+  <div class="d-flex align-items-center gap-2">
+    <img src="/img/logo.png" class="navbar-logo" alt="logo">
+    <span class="navbar-brand-text">Trámites 18+</span>
+  </div>
+
+  <div class="mi-dropdown" (clickOutside)="menuAbierto = false">
+    <div class="perfil-btn" (click)="menuAbierto = !menuAbierto">
+      <i class="bi bi-person-fill"></i>
+    </div>
+    <ul class="mi-menu" [class.visible]="menuAbierto">
+      <li>
+        <a class="mi-item" (click)="irAAdministrar(); menuAbierto = false">
+          <i class="bi bi-gear-fill me-2"></i> Administrar cuenta
+        </a>
+      </li>
+      <li><hr class="mi-divider"></li>
+      <li>
+        <a class="mi-item text-danger" (click)="cerrarSesion(); menuAbierto = false">
+          <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="hero-inner">
+    <div class="paso-badge">
+      <span class="paso-badge-dot"></span>
+      <span class="paso-badge-text">Paso 1 de 5 — Selección de trámite</span>
+    </div>
+
+    <p class="hero-eyebrow">Portal Oficial</p>
+    <h1 class="hero-title">¿Qué necesitas<br>tramitar hoy?</h1>
+    <p class="hero-subtitle">Selecciona un trámite para ver cómo hacerlo paso a paso.</p>
+
+    <!-- Filtros -->
+    <div class="filtros-wrapper">
+      <button *ngIf="filtroSeleccionado === 'Todos' || filtroSeleccionado === 'Alta'"
+              class="filtro-btn filtro-alta"
+              (click)="setFiltro('Alta')">
+        <i class="bi bi-circle-fill" style="font-size:8px"></i> Alta prioridad
+      </button>
+      <button *ngIf="filtroSeleccionado === 'Todos' || filtroSeleccionado === 'Media'"
+              class="filtro-btn filtro-media"
+              (click)="setFiltro('Media')">
+        <i class="bi bi-circle-fill" style="font-size:8px"></i> Media prioridad
+      </button>
+      <button *ngIf="filtroSeleccionado === 'Todos' || filtroSeleccionado === 'Baja'"
+              class="filtro-btn filtro-baja"
+              (click)="setFiltro('Baja')">
+        <i class="bi bi-circle-fill" style="font-size:8px"></i> Baja prioridad
+      </button>
+      <button *ngIf="filtroSeleccionado !== 'Todos'"
+              class="filtro-btn filtro-reset"
+              (click)="setFiltro('Todos')">
+        <i class="bi bi-x-lg" style="font-size:9px"></i> Quitar filtro
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LISTA DE TRÁMITES ──────────────────────────── -->
+<div class="main-content">
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="empty-state">
+    <div class="spinner-border text-purple mb-3" role="status" style="color:#9333ea"></div>
+    <p>Cargando tus trámites...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !cargando" class="empty-state">
+    <i class="bi bi-exclamation-circle d-block"></i>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="!cargando && !error && tramitesFiltrados.length === 0" class="empty-state">
+    <i class="bi bi-inbox d-block"></i>
+    <p>No hay trámites con ese filtro.</p>
+  </div>
+
+  <!-- Tarjetas -->
+  <div *ngIf="!cargando && !error">
+  <div *ngFor="let t of tramitesFiltrados"
+       class="tramite-card"
+       [ngClass]="{
+         'prioridad-alta':  t.prioridades.length === 1 && t.prioridades[0] === 'Alta',
+         'prioridad-media': t.prioridades.length === 1 && t.prioridades[0] === 'Media',
+         'prioridad-baja':  t.prioridades.length === 1 && t.prioridades[0] === 'Baja',
+         'prioridad-multi': t.prioridades.length > 1
+       }">
+
+    <!-- Fila superior -->
+    <div class="card-top">
+      <div class="tramite-img-wrap">
+        <img [src]="t.img" [alt]="t.nombre">
+      </div>
+
+      <div class="tramite-info">
+        <h5 class="tramite-nombre">{{ t.nombre }}</h5>
+     <p class="tramite-sub" *ngIf="t.descripcion">{{ t.descripcion }}</p>
+        <div class="tags-row">
+          <span *ngIf="t.prioridades.includes('Alta')"  class="tag tag-alta">Alta</span>
+          <span *ngIf="t.prioridades.includes('Media')" class="tag tag-media">Media</span>
+          <span *ngIf="t.prioridades.includes('Baja')"  class="tag tag-baja">Baja</span>
+        </div>
+      </div>
+
+      <button class="btn-ver-mas" (click)="verMasInformacion(t)">
+        Ver detalle <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <!-- Fila detalles -->
+    <div class="card-details">
+      <div class="detalle-item">
+        <div class="detalle-icon"
+             [ngClass]="t.estado_tramite === 'Finalizado' ? 'icon-fin' : 'icon-estado'">
+          <i class="bi"
+             [ngClass]="t.estado_tramite === 'Finalizado' ? 'bi-check-circle-fill' : 'bi-hourglass-split'"></i>
+        </div>
+        <div>
+          <p class="detalle-label">Estado</p>
+          <p class="detalle-valor" [class.text-success]="t.estado_tramite === 'Finalizado'">
+            {{ t.estado_tramite }}
+          </p>
+        </div>
+      </div>
+
+      <div class="detalle-item">
+        <div class="detalle-icon icon-inicio">
+          <i class="bi bi-calendar-event"></i>
+        </div>
+        <div>
+          <p class="detalle-label">Inicio</p>
+          <p class="detalle-valor">{{ t.fecha_inicio | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+
+      <div class="detalle-item">
+        <div class="detalle-icon icon-fin">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <div>
+          <p class="detalle-label">Fin</p>
+          <p class="detalle-valor">
+            {{ t.fecha_finalizacion ? (t.fecha_finalizacion | date:'dd/MM/yyyy') : 'Sin finalizar' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- fin *ngFor -->
+  </div><!-- fin bloque cargado -->
+</div>
+<app-chat-flotante />

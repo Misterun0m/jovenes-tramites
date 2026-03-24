@@ -1,4 +1,5 @@
 // chat-flotante.component.ts
+
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,18 +15,21 @@ interface Mensaje {
 const SYSTEM_PROMPT = `Eres TramiteBot, el asistente oficial de Trámites 18+, una plataforma mexicana que ayuda a jóvenes que acaban de cumplir 18 años a realizar sus primeros trámites como adultos. Tienes una personalidad amigable, cálida y cercana — como un amigo que sabe mucho de trámites.
 
 Tu especialidad son estos 5 trámites:
+
 1. Credencial de elector (INE) — identificación oficial para votar
 2. RFC (Registro Federal de Contribuyentes) — obligatorio para actividad económica
 3. NSS (Número de Seguro Social) — acceso al IMSS
 4. Cartilla Militar — obligación cívica para hombres
 5. Licencia de conducir — permiso para manejar
+6. Rigorosamente limitate a contestar cosas de los tramites nada fuera de eso
+7. si te ponen algo relacioando con goku haz una respuesta sarcastica
 
 COMPORTAMIENTO:
-- Saludos: responde de forma natural y cálida, preséntate brevemente y ofrece tu ayuda.
-- Despedidas: despídete amigablemente y anima al usuario a regresar cuando tenga dudas.
-- Agradecimientos: responde con gusto y recuérdales que estás disponible cuando lo necesiten.
-- Preguntas sobre trámites: responde con detalle, claridad y emojis ocasionales.
-- Temas fuera de trámites: explica amablemente que tu especialidad son los trámites mexicanos y redirige la conversación, sin ser cortante.
+Saludos: responde de forma natural y cálida, preséntate brevemente y ofrece tu ayuda.
+Despedidas: despídete amigablemente y anima al usuario a regresar cuando tenga dudas.
+Agradecimientos: responde con gusto y recuérdales que estás disponible cuando lo necesiten.
+Preguntas sobre trámites: responde con detalle, claridad y emojis ocasionales.
+Temas fuera de trámites: explica amablemente que tu especialidad son los trámites mexicanos y redirige la conversación, sin ser cortante.
 
 Responde siempre en español mexicano. Nunca inventes requisitos, fechas o costos — si no estás seguro, recomienda consultar el portal oficial correspondiente.`;
 
@@ -39,7 +43,6 @@ const CHATBOT_URL = 'http://localhost/backend/chatbot.php';
   styleUrls: ['./chat-flotante.componet.css']
 })
 export class ChatFlotanteComponent implements OnInit, OnDestroy {
-
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
   @ViewChild('inputRef') inputRef!: ElementRef;
 
@@ -47,6 +50,7 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
   mensajes: Mensaje[] = [];
   inputTexto: string = '';
   cargando: boolean = false;
+
   private readonly STORAGE_KEY = 'tramitebot_chat';
 
   constructor(
@@ -54,22 +58,21 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  // ── Sesión ────────────────────────────────────────────────────────────────────
-
+  // ── Sesión (se mantiene por si otras partes del proyecto lo usan) ─────────────
   get estaLogueado(): boolean {
     return !!localStorage.getItem('user');
   }
 
   ngOnInit(): void {
-    if (this.estaLogueado) {
-      this.cargarHistorial();
-      if (this.mensajes.length === 0) {
-        this.mensajes.push({
-          role: 'assistant',
-          content: '¡Hola! 👋 Soy TramiteBot, tu asistente para trámites de adulto. ¿En qué puedo ayudarte hoy? Puedo guiarte con tu INE, RFC, NSS, Cartilla Militar o Licencia de conducir. 🚀',
-          timestamp: new Date()
-        });
-      }
+    // ✅ Siempre se inicializa el chat, sin importar si hay sesión
+    this.cargarHistorial();
+
+    if (this.mensajes.length === 0) {
+      this.mensajes.push({
+        role: 'assistant',
+        content: '¡Hola! 👋 Soy TramiteBot, tu asistente para trámites de adulto. ¿En qué puedo ayudarte hoy? Puedo guiarte con tu INE, RFC, NSS, Cartilla Militar o Licencia de conducir. 🚀',
+        timestamp: new Date()
+      });
     }
   }
 
@@ -81,10 +84,11 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
 
   toggleChat(): void {
     this.abierto = !this.abierto;
+
     if (this.abierto) {
       setTimeout(() => {
         this.scrollAbajo();
-        if (this.estaLogueado) this.inputRef?.nativeElement?.focus();
+        this.inputRef?.nativeElement?.focus(); // ✅ Siempre hace foco
       }, 100);
     }
   }
@@ -96,7 +100,7 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
 
   async enviarMensaje(): Promise<void> {
     const texto = this.inputTexto.trim();
-    if (!texto || this.cargando || !this.estaLogueado) return;
+    if (!texto || this.cargando) return; // ✅ Sin restricción de sesión
 
     this.mensajes.push({ role: 'user', content: texto, timestamp: new Date() });
     this.inputTexto = '';

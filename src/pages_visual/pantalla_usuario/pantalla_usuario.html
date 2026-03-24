@@ -1,76 +1,89 @@
 <!-- pantalla_usuario.html -->
 <div class="pu-wrapper">
 
-  <!-- Sidebar izquierdo -->
+  <!-- ═══════════ SIDEBAR ═══════════ -->
   <aside class="pu-sidebar">
     <div class="pu-logo">
-      <span class="pu-logo-icon">🚀</span>
+      <img src="/img/logo.png" width="28" style="border-radius:8px">
       <span class="pu-logo-text">Trámites 18+</span>
     </div>
 
     <div class="pu-avatar-block">
-      <!-- Avatar dinámico según sexo -->
       <div class="pu-avatar"
            [class.avatar-fem]="usuario.user_sex === 'Femenino'"
            [class.avatar-mas]="usuario.user_sex === 'Masculino'"
            [class.avatar-nd]="!usuario.user_sex">
-        @if (usuario.user_sex === 'Femenino') {
-          <i class="bi bi-person-fill-check"></i>
-        } @else if (usuario.user_sex === 'Masculino') {
-          <i class="bi bi-person-fill"></i>
-        } @else {
-          <i class="bi bi-person-fill-exclamation"></i>
-        }
+        <i class="bi bi-person-fill-check"       *ngIf="usuario.user_sex === 'Femenino'"></i>
+        <i class="bi bi-person-fill"              *ngIf="usuario.user_sex === 'Masculino'"></i>
+        <i class="bi bi-person-fill-exclamation"  *ngIf="!usuario.user_sex"></i>
       </div>
 
       <div class="pu-name-wrap">
         <span class="pu-username">{{ usuario.user_nom || 'Sin nombre' }}</span>
         <span class="pu-email">{{ usuario.user_correo }}</span>
-        <!-- Badge de sexo debajo del nombre -->
+
+        <!-- Badge Google -->
+        <span class="pu-google-badge" *ngIf="esUsuarioGoogle">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Cuenta Google
+        </span>
+
         <span class="pu-sex-badge"
               [class.badge-fem]="usuario.user_sex === 'Femenino'"
               [class.badge-mas]="usuario.user_sex === 'Masculino'"
               [class.badge-nd]="!usuario.user_sex">
-          @if (usuario.user_sex === 'Femenino') {
+          <ng-container *ngIf="usuario.user_sex === 'Femenino'">
             <i class="bi bi-gender-female"></i> Femenino
-          } @else if (usuario.user_sex === 'Masculino') {
+          </ng-container>
+          <ng-container *ngIf="usuario.user_sex === 'Masculino'">
             <i class="bi bi-gender-male"></i> Masculino
-          } @else {
+          </ng-container>
+          <ng-container *ngIf="!usuario.user_sex">
             <i class="bi bi-question-circle"></i> Sin especificar
-          }
+          </ng-container>
         </span>
       </div>
 
-      <button class="pu-edit-btn" (click)="abrirEdicion()">
-        ✏️ Editar perfil
-      </button>
+    
     </div>
 
     <nav class="pu-nav">
-      <div class="pu-nav-item" [class.active]="vistaActual === 'tramites'" (click)="vistaActual = 'tramites'">
-        <span class="nav-icon">📋</span>
+      <div class="pu-nav-item"
+           [class.active]="vistaActual === 'tramites'"
+           (click)="vistaActual = 'tramites'">
+        <i class="bi bi-list-check nav-icon"></i>
         <span>Mis Trámites</span>
       </div>
-      <div class="pu-nav-item" [class.active]="vistaActual === 'perfil'" (click)="vistaActual = 'perfil'">
-        <span class="nav-icon">👤</span>
+      <div class="pu-nav-item"
+           [class.active]="vistaActual === 'perfil'"
+           (click)="irPerfil()">
+        <i class="bi bi-person nav-icon"></i>
         <span>Mi Perfil</span>
       </div>
       <div class="pu-nav-item" (click)="irTutorial()">
-        <span class="nav-icon">🎓</span>
-        <span>Tutorial</span>
+        <i class="bi bi-mortarboard nav-icon"></i>
+        <span>Trámites</span>
       </div>
     </nav>
 
-    <button class="pu-logout-btn" (click)="cerrarSesion()">
-      <span>⬅️</span> Cerrar sesión
-    </button>
+    <div class="pu-sidebar-footer">
+    
+      <button class="pu-logout-btn" (click)="cerrarSesion()">
+        <i class="bi bi-box-arrow-left me-1"></i> Cerrar sesión
+      </button>
+    </div>
   </aside>
 
-  <!-- Contenido principal -->
+  <!-- ═══════════ CONTENIDO PRINCIPAL ═══════════ -->
   <main class="pu-main">
 
-    <!-- ══════════════ VISTA: TRÁMITES ══════════════ -->
-    @if (vistaActual === 'tramites') {
+    <!-- ══════════ VISTA: TRÁMITES ══════════ -->
+    <ng-container *ngIf="vistaActual === 'tramites'">
       <header class="pu-header">
         <div>
           <h1 class="pu-title">Mis Trámites</h1>
@@ -89,167 +102,327 @@
       </header>
 
       <div class="pu-tramites-grid">
-        @if (tramites.length === 0) {
-          <div class="pu-empty">
-            <div class="empty-icon">📭</div>
-            <p>Aún no tienes trámites registrados</p>
-            <button class="btn-explore" (click)="irTutorial()">Explorar trámites</button>
-          </div>
-        }
 
-        @for (t of tramites; track t.user_idtramite) {
-          <div class="tramite-card"
-               [class.finalizado]="t.estado_tramite === 'Finalizado'"
-               [class.en-proceso]="t.estado_tramite === 'En proceso'">
-            <div class="tc-top">
-              <div class="tc-icon">{{ getTramiteIcon(t.tram_tip) }}</div>
-              <div class="tc-info">
-                <h3 class="tc-tipo">{{ t.tram_tip }}</h3>
-                <span class="tc-badge" [class]="getBadgeClass(t.estado_tramite)">
-                  {{ t.estado_tramite }}
+        <div class="pu-empty" *ngIf="tramites.length === 0">
+          <i class="bi bi-inbox empty-icon"></i>
+          <p>Aún no tienes trámites registrados</p>
+          <button class="btn-explore" (click)="irTutorial()">Explorar trámites</button>
+        </div>
+
+        <div class="tramite-card"
+             *ngFor="let t of tramites"
+             [class.finalizado]="t.estado_tramite === 'Finalizado'"
+             [class.en-proceso]="t.estado_tramite === 'En proceso'">
+          <div class="tc-top">
+            <div class="tc-icon">
+              <img [src]="getTramiteIcon(t.tram_tip)" [alt]="t.tram_tip" class="tc-img">
+            </div>
+            <div class="tc-info">
+              <h3 class="tc-tipo">{{ t.tram_tip }}</h3>
+              <span class="tc-badge" [class]="getBadgeClass(t.estado_tramite)">
+                {{ t.estado_tramite }}
+              </span>
+            </div>
+          </div>
+
+          <div class="tc-saber" *ngIf="t.tram_saber">
+            <p>{{ t.tram_saber }}</p>
+          </div>
+
+          <div class="tc-footer">
+            <label class="tc-select-label">Actualizar estado:</label>
+            <select [(ngModel)]="t.estado_tramite"
+                    (change)="cambiarEstado(t, t.estado_tramite)"
+                    class="tc-select">
+              <option value="Pendiente"> Pendiente</option>
+              <option value="En proceso"> En proceso</option>
+              <option value="Finalizado"> Finalizado</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
+
+    <!-- ══════════ VISTA: MI PERFIL ══════════ -->
+    <ng-container *ngIf="vistaActual === 'perfil'">
+      <div class="perfil-page">
+        <div class="perfil-modal-card">
+
+          <!-- Header degradado -->
+          <div class="perfil-modal-header">
+            <h1 class="perfil-modal-title">Mi Perfil</h1>
+            <p class="perfil-modal-subtitle">Gestiona tu información personal</p>
+            <div class="perfil-header-divider"></div>
+          </div>
+
+          <!-- Avatar -->
+          <div class="perfil-avatar-section">
+            <div class="perfil-avatar-ring"
+                 [class.ring-fem]="usuarioEdit.user_sex === 'Femenino'"
+                 [class.ring-mas]="usuarioEdit.user_sex === 'Masculino'"
+                 [class.ring-nd]="!usuarioEdit.user_sex">
+              <div class="perfil-avatar-inner">
+                <i class="bi bi-person-fill"></i>
+              </div>
+            </div>
+            <div class="perfil-verified-badge">
+              <i class="bi bi-shield-check"></i> Ciudadano Verificado
+            </div>
+            <!-- Indicador de cuenta Google en la tarjeta de perfil -->
+            <div class="perfil-google-badge" *ngIf="esUsuarioGoogle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Vinculado con Google
+            </div>
+          </div>
+
+          <!-- Grid de campos -->
+          <div class="perfil-fields-grid">
+
+            <!-- Nombre Completo -->
+            <div class="pf-field">
+              <label class="pf-label">Nombre Completo</label>
+              <div class="pf-input-wrap" [class.pf-editable]="editing">
+                <i class="bi bi-person pf-icon"></i>
+                <input type="text"
+                       [(ngModel)]="usuarioEdit.user_nom"
+                       [readonly]="!editing"
+                       class="pf-input"
+                       placeholder="Tu nombre completo">
+              </div>
+            </div>
+
+            <!-- Género -->
+            <div class="pf-field">
+              <label class="pf-label">Género</label>
+
+              <!-- Modo edición -->
+              <div class="pf-input-wrap pf-editable pf-select-wrap" *ngIf="editing">
+                <i class="bi bi-gender-female pf-icon" style="color:#c026d3"
+                   *ngIf="usuarioEdit.user_sex === 'Femenino'"></i>
+                <i class="bi bi-gender-male pf-icon" style="color:#7c3aed"
+                   *ngIf="usuarioEdit.user_sex === 'Masculino'"></i>
+                <i class="bi bi-gender-ambiguous pf-icon" style="color:#9ca3af"
+                   *ngIf="!usuarioEdit.user_sex"></i>
+                <select [(ngModel)]="usuarioEdit.user_sex" class="pf-select">
+                  <option value="Femenino">Femenino</option>
+                  <option value="Masculino">Masculino</option>
+                </select>
+                <i class="bi bi-chevron-down pf-chevron"></i>
+              </div>
+
+              <!-- Modo lectura -->
+              <div class="pf-input-wrap" *ngIf="!editing">
+                <i class="bi bi-gender-female pf-icon" style="color:#c026d3"
+                   *ngIf="usuarioEdit.user_sex === 'Femenino'"></i>
+                <i class="bi bi-gender-male pf-icon" style="color:#7c3aed"
+                   *ngIf="usuarioEdit.user_sex === 'Masculino'"></i>
+                <i class="bi bi-gender-ambiguous pf-icon" style="color:#9ca3af"
+                   *ngIf="!usuarioEdit.user_sex"></i>
+                <input type="text"
+                       [value]="usuarioEdit.user_sex || 'Sin especificar'"
+                       readonly
+                       class="pf-input">
+                <i class="bi bi-chevron-down pf-chevron"></i>
+              </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="pf-field">
+              <label class="pf-label">Fecha de Nacimiento</label>
+              <div class="pf-input-wrap" [class.pf-editable]="editing">
+                <i class="bi bi-calendar3 pf-icon"></i>
+                <input type="date"
+                       [(ngModel)]="usuarioEdit.fecha_nacimiento"
+                       [readonly]="!editing"
+                       class="pf-input">
+              </div>
+            </div>
+
+            <!-- Correo Electrónico -->
+            <div class="pf-field">
+              <label class="pf-label">Correo Electrónico</label>
+
+              <!-- Usuario local: editable en modo edición -->
+              <div class="pf-input-wrap"
+                   [class.pf-editable]="editing && !esUsuarioGoogle"
+                   [class.pf-readonly]="!editing || esUsuarioGoogle"
+                   *ngIf="!esUsuarioGoogle">
+                <i class="bi bi-envelope pf-icon"></i>
+                <input type="email"
+                       [(ngModel)]="usuarioEdit.user_correo"
+                       [readonly]="!editing"
+                       class="pf-input"
+                       placeholder="tu@correo.com">
+              </div>
+
+              <!-- Usuario Google: siempre bloqueado con indicador -->
+              <div class="pf-input-wrap pf-readonly" *ngIf="esUsuarioGoogle">
+                <i class="bi bi-envelope pf-icon"></i>
+                <input type="email"
+                       [value]="usuarioEdit.user_correo"
+                       readonly
+                       class="pf-input">
+                <span class="pf-google-lock">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
+                  Google
                 </span>
               </div>
             </div>
 
-            @if (t.tram_saber) {
-              <div class="tc-saber">
-                <p>{{ t.tram_saber }}</p>
+          </div><!-- /perfil-fields-grid -->
+
+          <!-- ══ Sección contraseña ══
+               • Usuarios locales  → botón toggle + formulario
+               • Usuarios Google   → solo mensaje informativo              -->
+
+          <!-- Mensaje informativo para cuentas Google (sin toggle, sin formulario) -->
+          <div class="perfil-pass-toggle-wrap" *ngIf="esUsuarioGoogle">
+            <div class="google-pass-notice">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <span>
+                Tu sesión está gestionada por <strong>Google</strong>.
+                El cambio de contraseña no está disponible para cuentas vinculadas con Google.
+              </span>
+            </div>
+          </div>
+
+          <!-- Botón toggle solo para usuarios con contraseña local -->
+          <div class="perfil-pass-toggle-wrap" *ngIf="!esUsuarioGoogle">
+            <button class="btn-toggle-pass"
+                    (click)="showPasswordSection = !showPasswordSection">
+              <i class="bi bi-lock"      *ngIf="!showPasswordSection"></i>
+              <i class="bi bi-lock-fill" *ngIf="showPasswordSection"></i>
+              {{ showPasswordSection ? 'Ocultar cambio de contraseña' : 'Cambiar contraseña' }}
+              <i class="bi bi-chevron-down" *ngIf="!showPasswordSection"></i>
+              <i class="bi bi-chevron-up"   *ngIf="showPasswordSection"></i>
+            </button>
+          </div>
+
+          <!-- Formulario de contraseña (solo usuarios locales) -->
+          <div class="password-section" *ngIf="showPasswordSection && !esUsuarioGoogle">
+
+            <div class="pf-field">
+              <label class="pf-label">Contraseña actual</label>
+              <div class="pf-input-wrap pf-editable">
+                <i class="bi bi-lock pf-icon"></i>
+                <input [type]="showPassActual ? 'text' : 'password'"
+                       [(ngModel)]="passwordData.actual"
+                       class="pf-input"
+                       placeholder="Tu contraseña actual"
+                       autocomplete="current-password">
+                <button class="btn-eye" type="button"
+                        (click)="showPassActual = !showPassActual">
+                  <i class="bi bi-eye"       *ngIf="!showPassActual"></i>
+                  <i class="bi bi-eye-slash" *ngIf="showPassActual"></i>
+                </button>
               </div>
-            }
-
-            <div class="tc-footer">
-              <label class="tc-select-label">Actualizar estado:</label>
-              <select [(ngModel)]="t.estado_tramite"
-                      (change)="cambiarEstado(t, t.estado_tramite)"
-                      class="tc-select">
-                <option value="Pendiente">⏳ Pendiente</option>
-                <option value="En proceso">🔄 En proceso</option>
-                <option value="Finalizado">✅ Finalizado</option>
-              </select>
             </div>
-          </div>
-        }
-      </div>
-    }
 
-    <!-- ══════════════ VISTA: PERFIL ══════════════ -->
-    @if (vistaActual === 'perfil') {
-      <header class="pu-header">
-        <div>
-          <h1 class="pu-title">Mi Perfil</h1>
-          <p class="pu-subtitle">Actualiza tu información personal</p>
-        </div>
-      </header>
-
-      <div class="pu-perfil-card">
-
-        <!-- Nombre -->
-        <div class="perfil-field">
-          <label class="perfil-label">Nombre completo</label>
-          <div class="perfil-input-wrap">
-            <span class="perfil-icon">👤</span>
-            <input type="text"
-                   [(ngModel)]="usuarioEdit.user_nom"
-                   [readonly]="!editing"
-                   class="perfil-input"
-                   [class.editable]="editing"
-                   placeholder="Tu nombre completo">
-          </div>
-        </div>
-
-        <!-- Sexo -->
-        <div class="perfil-field">
-          <label class="perfil-label">Sexo biológico</label>
-          @if (editing) {
-            <div class="sex-options">
-              <label class="sex-option" [class.selected]="usuarioEdit.user_sex === 'Femenino'">
-                <input type="radio" [(ngModel)]="usuarioEdit.user_sex" name="user_sex" value="Femenino">
-                <i class="bi bi-gender-female"></i>
-                <span>Femenino</span>
-              </label>
-              <label class="sex-option" [class.selected]="usuarioEdit.user_sex === 'Masculino'">
-                <input type="radio" [(ngModel)]="usuarioEdit.user_sex" name="user_sex" value="Masculino">
-                <i class="bi bi-gender-male"></i>
-                <span>Masculino</span>
-              </label>
+            <div class="pf-field">
+              <label class="pf-label">Nueva contraseña</label>
+              <div class="pf-input-wrap pf-editable">
+                <i class="bi bi-key pf-icon"></i>
+                <input [type]="showPassNueva ? 'text' : 'password'"
+                       [(ngModel)]="passwordData.nueva"
+                       class="pf-input"
+                       placeholder="Mínimo 8 caracteres, 1 mayúscula, 1 número"
+                       autocomplete="new-password">
+                <button class="btn-eye" type="button"
+                        (click)="showPassNueva = !showPassNueva">
+                  <i class="bi bi-eye"       *ngIf="!showPassNueva"></i>
+                  <i class="bi bi-eye-slash" *ngIf="showPassNueva"></i>
+                </button>
+              </div>
             </div>
-          } @else {
-            <div class="perfil-input-wrap">
-              @if (usuarioEdit.user_sex === 'Femenino') {
-                <i class="bi bi-gender-female perfil-icon" style="color:#c026d3"></i>
-              } @else if (usuarioEdit.user_sex === 'Masculino') {
-                <i class="bi bi-gender-male perfil-icon" style="color:#2563eb"></i>
-              } @else {
-                <i class="bi bi-question-circle perfil-icon" style="color:#9ca3af"></i>
-              }
-              <input type="text"
-                     [value]="usuarioEdit.user_sex || 'Sin especificar'"
-                     readonly
-                     class="perfil-input">
+
+            <div class="pf-field">
+              <label class="pf-label">Confirmar nueva contraseña</label>
+              <div class="pf-input-wrap pf-editable"
+                   [class.input-error]="passwordData.confirmar && passwordData.nueva !== passwordData.confirmar"
+                   [class.input-ok]="passwordData.confirmar && passwordData.nueva === passwordData.confirmar">
+                <i class="bi bi-shield-lock pf-icon"></i>
+                <input [type]="showPassConfirmar ? 'text' : 'password'"
+                       [(ngModel)]="passwordData.confirmar"
+                       class="pf-input"
+                       placeholder="Repite la nueva contraseña"
+                       autocomplete="new-password">
+                <button class="btn-eye" type="button"
+                        (click)="showPassConfirmar = !showPassConfirmar">
+                  <i class="bi bi-eye"       *ngIf="!showPassConfirmar"></i>
+                  <i class="bi bi-eye-slash" *ngIf="showPassConfirmar"></i>
+                </button>
+              </div>
+              <span class="match-error"
+                    *ngIf="passwordData.confirmar && passwordData.nueva !== passwordData.confirmar">
+                <i class="bi bi-x-circle-fill"></i> Las contraseñas no coinciden
+              </span>
+              <span class="match-ok"
+                    *ngIf="passwordData.confirmar && passwordData.nueva === passwordData.confirmar">
+                <i class="bi bi-check-circle-fill"></i> Las contraseñas coinciden
+              </span>
             </div>
-          }
-        </div>
 
-        <!-- Fecha de nacimiento -->
-        <div class="perfil-field">
-          <label class="perfil-label">Fecha de nacimiento</label>
-          <div class="perfil-input-wrap">
-            <span class="perfil-icon">🎂</span>
-            <input type="date"
-                   [(ngModel)]="usuarioEdit.fecha_nacimiento"
-                   [readonly]="!editing"
-                   class="perfil-input"
-                   [class.editable]="editing">
-          </div>
-        </div>
-
-        <!-- Correo -->
-        <div class="perfil-field">
-          <label class="perfil-label">
-            Correo electrónico
-            <span class="perfil-badge-readonly">No editable</span>
-          </label>
-          <div class="perfil-input-wrap">
-            <span class="perfil-icon">✉️</span>
-            <input type="email"
-                   [value]="usuarioEdit.user_correo"
-                   readonly
-                   class="perfil-input readonly">
-          </div>
-        </div>
-
-        <!-- Miembro desde -->
-        <div class="perfil-field">
-          <label class="perfil-label">Miembro desde</label>
-          <div class="perfil-input-wrap">
-            <span class="perfil-icon">📅</span>
-            <input type="text"
-                   [value]="usuarioEdit.created_at | date:'dd/MM/yyyy'"
-                   readonly
-                   class="perfil-input readonly">
-          </div>
-        </div>
-
-        <!-- Botones -->
-        <div class="perfil-actions">
-          @if (!editing) {
-            <button class="btn-perfil-edit" (click)="abrirEdicion()">
-              ✏️ Editar información
+            <button class="btn-cambiar-pass" (click)="cambiarPassword()">
+              <i class="bi bi-floppy me-1"></i> Guardar nueva contraseña
             </button>
-          } @else {
-            <button class="btn-perfil-save" (click)="guardarCambios()">
-              💾 Guardar cambios
-            </button>
-            <button class="btn-perfil-cancel" (click)="cancelarEdicion()">
-              ✖ Cancelar
-            </button>
-          }
-        </div>
 
-      </div>
-    }
+          </div><!-- /password-section -->
+
+          <!-- ── Botones de acción ── -->
+          <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 px-4 pb-4 pt-3">
+
+            <!-- Eliminar cuenta -->
+            <button class="btn btn-outline-danger d-flex align-items-center gap-2 rounded-pill px-4 fw-bold"
+                    (click)="eliminarCuenta()">
+              <i class="bi bi-trash3"></i> Eliminar Cuenta
+            </button>
+
+            <!-- Modo lectura → Actualizar Datos -->
+            <button class="btn btn-primary d-flex align-items-center gap-2 rounded-pill px-4 fw-bold"
+                    *ngIf="!editing"
+                    style="background-color:#7c3aed; border-color:#7c3aed;"
+                    (click)="abrirEdicion()">
+              <i class="bi bi-pencil-square"></i> Actualizar Datos
+            </button>
+
+            <!-- Modo edición → Guardar cambios -->
+            <button class="btn btn-primary d-flex align-items-center gap-2 rounded-pill px-4 fw-bold"
+                    *ngIf="editing"
+                    style="background-color:#7c3aed; border-color:#7c3aed;"
+                    (click)="guardarCambios()">
+              <i class="bi bi-floppy"></i> Guardar Cambios
+            </button>
+
+            <!-- Modo edición → Cancelar -->
+            <button class="btn btn-outline-secondary d-flex align-items-center gap-2 rounded-pill px-4 fw-bold"
+                    *ngIf="editing"
+                    (click)="cancelarEdicion()">
+              <i class="bi bi-x-lg"></i> Cancelar
+            </button>
+
+          </div><!-- /botones de acción -->
+
+        </div><!-- /perfil-modal-card -->
+      </div><!-- /perfil-page -->
+    </ng-container>
 
   </main>
-  
+
 </div>
 <app-chat-flotante />

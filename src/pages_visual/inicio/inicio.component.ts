@@ -38,7 +38,7 @@ export class InicioComponent {
       descripcion: 'Documento necesario para viajar al extranjero.',
       icono: 'bi-airplane-engines',
       iconClass: 'icon-pasaporte',
-      emoji: '✈️',
+      emoji: '',
       dato: 'El pasaporte mexicano es uno de los <strong>más poderosos de América Latina</strong> — te da acceso sin visa a más de 65 países. Pero tramitarlo puede tardar hasta <strong>4 semanas</strong> si no sabes cómo hacerlo bien.',
       pasos: [
         { texto: 'Ingresa al portal de la SRE y elige tu oficina de pasaportes', visible: true },
@@ -53,7 +53,7 @@ export class InicioComponent {
       descripcion: 'Clave única de registro poblacional.',
       icono: 'bi-person-badge-fill',
       iconClass: 'icon-curp',
-      emoji: '🔑',
+      emoji: '',
       dato: 'Tu CURP <strong>puede tener errores</strong> sin que lo sepas — y eso puede bloquearte al tramitar tu INE, RFC o pasaporte. El <strong>30% de los jóvenes</strong> descubren errores hasta que intentan hacer otro trámite.',
       pasos: [
         { texto: 'Entra a gob.mx y busca tu CURP con tu nombre y fecha de nacimiento', visible: true },
@@ -68,7 +68,7 @@ export class InicioComponent {
       descripcion: 'Registro Federal de Contribuyentes para trabajar.',
       icono: 'bi-file-earmark-text',
       iconClass: 'icon-rfc',
-      emoji: '💼',
+      emoji: '',
       dato: 'Sin RFC <strong>no puedes recibir un sueldo formal ni facturar</strong>. Lo que pocos saben: puedes tramitarlo completamente en línea en menos de <strong>20 minutos</strong>, pero hay un paso que casi todos hacen mal.',
       pasos: [
         { texto: 'Crea tu cuenta en el portal del SAT con tu CURP y correo', visible: true },
@@ -83,7 +83,7 @@ export class InicioComponent {
       descripcion: 'Permiso oficial para conducir vehículos.',
       icono: 'bi-car-front-fill',
       iconClass: 'icon-licencia',
-      emoji: '🚗',
+      emoji: '',
       dato: 'El <strong>examen de manejo reprueba al 40% de los jóvenes</strong> en su primer intento — no por no saber manejar, sino por no conocer las reglas exactas que evalúan. Nosotros te decimos exactamente qué estudiar.',
       pasos: [
         { texto: 'Identifica el tipo de licencia que necesitas según tu vehículo', visible: true },
@@ -98,7 +98,7 @@ export class InicioComponent {
       descripcion: 'Número de seguridad social para servicios médicos.',
       icono: 'bi-heart-pulse',
       iconClass: 'icon-imss',
-      emoji: '🏥',
+      emoji: '',
       dato: 'Muchos jóvenes <strong>tienen IMSS y no lo saben</strong> — si alguna vez trabajaste formalmente, ya tienes un NSS asignado. Recuperarlo toma 5 minutos, pero sin él podrías perder años de semanas cotizadas para tu pensión.',
       pasos: [
         { texto: 'Entra a imss.gob.mx y busca tu NSS con tu CURP', visible: true },

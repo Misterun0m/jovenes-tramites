@@ -52,7 +52,21 @@ export class RegistroComponent {
       Swal.fire({ icon: 'warning', title: 'Contraseña muy corta', text: 'La contraseña debe tener al menos 6 caracteres', confirmButtonColor: '#7b2cbf' });
       return;
     }
+ const calculoEdad = (fecha: string) => {
+      const hoy = new Date();
+      const nacimiento = new Date(fecha);
+      let edad = hoy.getFullYear() - nacimiento.getFullYear();
+      const m = hoy.getMonth() - nacimiento.getMonth();     
+      if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) { edad--; }
+      return edad;
+    } 
+    if (calculoEdad(this.usuario.fecha_nacimiento) < 18) {
+      Swal.fire({ icon: 'warning', title: 'Fecha de nacimiento inválida', text: 'Por favor selecciona una fecha de nacimiento válida', confirmButtonColor: '#7b2cbf' });
+      return;
+    }
 
+   
+  
     this.cargando = true;
     RegistroComponent.yaRegistrando = true;
 

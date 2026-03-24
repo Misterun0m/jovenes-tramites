@@ -1,0 +1,83 @@
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav class="navbar-custom">
+  <button class="navbar-back" (click)="irAtras()">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+  <img src="/img/logo.png" class="navbar-logo" alt="logo">
+  <span class="navbar-brand-text">Trámites 18+</span>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="hero-inner">
+    <div class="paso-badge">
+      <span class="paso-badge-dot"></span>
+      <span class="paso-badge-text">Paso 3 de 5 — Documentación requerida</span>
+    </div>
+    <h1 class="hero-title">Requisitos necesarios</h1>
+    <p class="hero-subtitle">
+      Toca cada documento para confirmar que lo tienes listo.
+    </p>
+
+    <!-- Barra de progreso -->
+    <div class="progress-bar-wrap" *ngIf="!cargando && requisitos.length > 0">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" [style.width.%]="progreso"></div>
+      </div>
+      <span class="progress-label">{{ progreso }}% completado</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTENIDO ─────────────────────────────────── -->
+<div class="main-content">
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="empty-state">
+    <div class="spinner-border mb-3" style="color:#9333ea" role="status"></div>
+    <p>Cargando requisitos...</p>
+  </div>
+
+  <!-- Grid de requisitos -->
+  <div class="requisitos-grid" *ngIf="!cargando">
+    <div *ngFor="let req of requisitos; let i = index"
+         class="requisito-card"
+         [class.completado]="req.completado"
+         (click)="toggleRequisito(i)">
+      <div class="req-checkbox" [class.checked]="req.completado">
+        <i class="bi bi-check-lg" *ngIf="req.completado"></i>
+      </div>
+      <span class="req-texto">{{ req.nombre }}</span>
+    </div>
+  </div>
+
+  <!-- Todos listos -->
+  <div class="todos-listos" *ngIf="todosCompletados && !cargando">
+    <i class="bi bi-patch-check-fill"></i>
+    <span>¡Tienes todo listo para continuar!</span>
+    
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-card" *ngIf="!cargando">
+    <div class="footer-left">
+     
+      <!-- Pasos -->
+      <div class="footer-steps">
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot active"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+      </div>
+    </div>
+    <button class="btn-siguiente" (click)="irSiguiente()">
+      Siguiente <span class="arrow">→</span>
+    </button>
+    <div *ngIf="intentoAvanzar && !todosCompletados" class="alerta-requisitos">
+  ⚠️ Te faltan {{ requisitosFaltantes }} requisito(s) por confirmar antes de continuar.
+</div>
+  </div>
+
+</div>
+<app-chat-flotante />

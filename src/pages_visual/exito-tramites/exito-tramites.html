@@ -1,0 +1,49 @@
+<nav class="navbar navbar-light bg-white shadow-sm fixed-top" style="height: 60px;">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+        <button class="navbar-back"  (click)="irAtras()">
+        <i class="bi bi-arrow-left fs-4"></i>
+      </button>
+      <img src="/img/logo.png" width="35" alt="Logo">
+      <span class="fw-bold">Inicio Ciudadano</span>
+    </div>
+  </div>
+</nav>
+
+<div class="main-wrapper">
+  <main class="page-container">
+    <section class="exito-card animate-card">
+
+      <aside class="left-panel">
+        <h1>Trámites para Futuros<br>Adultos</h1>
+        <div class="badge-circle">
+          <div class="badge-check">✓</div>
+        </div>
+        <p class="subtitle">Tu guía para comenzar tu nueva etapa</p>
+      </aside>
+
+      <section class="right-panel">
+        <div class="header-box">
+          <h2 class="title-text">¡¡Todo listo!!</h2>
+          <p class="step-text">Paso 5 de 5 : Ya puedes realizar tu cita.</p>
+        </div>
+
+        <img src="/img/logo.png" alt="check" class="img-celebrate">
+
+        <p class="quote-text">"Agenda tu cita en el sitio oficial"</p>
+
+        <p class="hint-text">
+          Haz clic en el botón de abajo para ser<br>
+          redirigido al portal de citas.
+        </p>
+
+        <div class="actions-group">
+          <button class="btn-main primary" (click)="irAlPortal()" type="button">Ir al portal</button>
+          <button class="btn-main secondary" (click)="irAlInicio()" type="button">Inicio</button>
+        </div>
+      </section>
+
+    </section>
+  </main>
+</div>
+<app-chat-flotante />

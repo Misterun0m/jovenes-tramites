@@ -25,7 +25,10 @@
           ¿Ya tienes cuenta?
           <a routerLink="/login" class="reg-link-white">Inicia sesión</a>
         </p>
-
+ 
+        <a routerLink="/" class="link-back-home">
+          <i class="bi bi-arrow-left"></i> Volver al inicio
+        </a>
       </div>
 
       <!-- LADO DERECHO -->
@@ -88,7 +91,7 @@
                    [(ngModel)]="usuario.user_pass"
                    placeholder="Mínimo 6 caracteres">
             <button type="button" class="toggle-pass" (click)="showPassword = !showPassword; $event.stopPropagation()">
-              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              <i [class]="showPassword ? 'bi bi-eye' : ' bi bi-eye-slash'"></i>
             </button>
           </div>
         </div>

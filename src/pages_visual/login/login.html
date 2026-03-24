@@ -9,7 +9,7 @@
         <span class="badge-top">Portal Oficial</span>
 
         <div class="rocket-wrap mx-auto">
-          <img src="/img/18.png" alt="Cohete" class="rocket-img">
+          <img src="/img/logo.png" alt="Cohete" class="rocket-img">
         </div>
 
         <h2>Trámites para<br>Futuros Adultos</h2>
@@ -17,7 +17,7 @@
 
         <div class="d-flex flex-column gap-2 w-100">
           <div class="pill d-flex align-items-center gap-2">
-            <i class="bi bi-shield-check"></i> Plataforma segura y oficial
+            <i class="bi bi-shield-check"></i> Plataforma segura 
           </div>
           <div class="pill d-flex align-items-center gap-2">
             <i class="bi bi-lightning-charge"></i> Proceso rápido y sencillo
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <!-- ✅ Link de regreso a inicio -->
+      
         <a routerLink="/" class="link-back-home">
           <i class="bi bi-arrow-left"></i> Volver al inicio
         </a>
@@ -60,7 +60,7 @@
                    [(ngModel)]="password"
                    placeholder="••••••••">
             <button type="button" class="toggle-pass" (click)="showPassword = !showPassword">
-              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              <i [class]="showPassword ? 'bi bi-eye' : '  bi bi-eye-slash'"></i>
             </button>
           </div>
         </div>
@@ -89,7 +89,6 @@
           <div id="googleButton"></div>
         </div>
 
-        <!-- ✅ Link de regreso visible solo en móvil -->
         <div class="d-md-none text-center mt-3">
           <a routerLink="/" class="link-muted">
             <i class="bi bi-arrow-left"></i> Volver al inicio
