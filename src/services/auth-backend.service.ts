@@ -26,7 +26,7 @@ export interface ApiResponse {
 })
 export class AuthBackendService {
 
-  private API_URL = 'https://backend-production-5b65.up.railway.app';
+  private API_URL = 'http://localhost/backend';
 
   constructor(private http: HttpClient) {}
 
@@ -79,4 +79,4 @@ export class AuthBackendService {
       { correo, password }
     );
   }
-}
+} 

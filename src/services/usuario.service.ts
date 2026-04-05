@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioService {
 
-  private registroUrl = 'https://backend-production-5b65.up.railway.app/registro.php';
-  private usuarioUrl  = 'https://backend-production-5b65.up.railway.app/usuario.php';
+  private registroUrl = 'http://localhost/backend/registro.php';
+  private usuarioUrl  = 'http://localhost/backend/usuario.php';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class UsuarioService {
 
   // ── Recuperación de contraseña ────────────────────────
   enviarCodigo(correo: string): Observable<any> {
-    return this.http.post('https://backend-production-5b65.up.railway.app/enviar_codigo.php', { correo });
+    return this.http.post('http://localhost/backend/enviar_codigo.php', { correo });
   }
 
   // ── Perfil de usuario ─────────────────────────────────

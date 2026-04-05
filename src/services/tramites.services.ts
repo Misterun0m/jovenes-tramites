@@ -22,7 +22,7 @@ export interface TramitesResponse {
 @Injectable({ providedIn: 'root' })
 export class TramitesService {
 
-  private apiUrl = 'https://backend-production-5b65.up.railway.app/get_tramites_usuario.php';
+  private apiUrl = 'http://localhost/backend/get_tramites_usuario.php';
 
   constructor(private http: HttpClient) {}
 
