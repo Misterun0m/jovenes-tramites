@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  private registroUrl = 'http://localhost/backend/registro.php';
-  private usuarioUrl  = 'http://localhost/backend/usuario.php';
+  private registroUrl = environment.apiUrl + '/registro.php';
+  private usuarioUrl  = environment.apiUrl + '/usuario.php';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +20,7 @@ export class UsuarioService {
 
   // ── Recuperación de contraseña ────────────────────────
   enviarCodigo(correo: string): Observable<any> {
-    return this.http.post('http://localhost/backend/enviar_codigo.php', { correo });
+    return this.http.post(environment.apiUrl + '/enviar_codigo.php', { correo });
   }
 
   // ── Perfil de usuario ─────────────────────────────────

@@ -4,6 +4,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 interface Mensaje {
   role: 'user' | 'assistant';
@@ -33,7 +34,7 @@ Temas fuera de trámites: explica amablemente que tu especialidad son los trámi
 
 Responde siempre en español mexicano. Nunca inventes requisitos, fechas o costos — si no estás seguro, recomienda consultar el portal oficial correspondiente.`;
 
-const CHATBOT_URL = 'http://localhost/backend/chatbot.php';
+const CHATBOT_URL = environment.apiUrl + '/chatbot.php';
 
 @Component({
   selector: 'app-chat-flotante',

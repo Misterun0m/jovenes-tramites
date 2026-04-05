@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 /* =========================
    MODELOS
 ========================= */
-// ✅ Campos alineados con lo que devuelve el backend PHP
 export interface User {
   user_id:          number;
   user_nom:         string;
@@ -26,7 +26,7 @@ export interface ApiResponse {
 })
 export class AuthBackendService {
 
-  private API_URL = 'http://localhost/backend';
+  private API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -79,4 +79,4 @@ export class AuthBackendService {
       { correo, password }
     );
   }
-} 
+}

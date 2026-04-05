@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface TramiteUsuario {
   user_idtramite: number;
@@ -22,7 +23,7 @@ export interface TramitesResponse {
 @Injectable({ providedIn: 'root' })
 export class TramitesService {
 
-  private apiUrl = 'http://localhost/backend/get_tramites_usuario.php';
+  private apiUrl = environment.apiUrl + '/get_tramites_usuario.php';
 
   constructor(private http: HttpClient) {}
 

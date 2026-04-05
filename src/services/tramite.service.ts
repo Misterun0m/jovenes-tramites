@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class TramiteService {
 
-  private apiUrl = 'http://localhost/backend/tramite.php'; // Cambia a tu ruta real del PHP
+ private apiUrl = environment.apiUrl + '/tramite.php';
 
   constructor(private http: HttpClient) {}
 

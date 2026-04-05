@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface Tramite {
   tram_id:    number;
@@ -59,11 +60,9 @@ type ApiResp<T> = ApiOk<T> | ApiError;
 @Injectable({ providedIn: 'root' })
 export class TramitesService {
 
-  private readonly BASE = 'http://localhost/backend';
+  private readonly BASE = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
-
-  // ── Trámites ──────────────────────────────────────────────
 
   getTramites(): Observable<Tramite[]> {
     return this.http.get<ApiResp<Tramite[]>>(`${this.BASE}/tramites.php`).pipe(
@@ -71,8 +70,6 @@ export class TramitesService {
       catchError(this.handleError)
     );
   }
-
-  // ── Trámites del usuario ──────────────────────────────────
 
   getUserTramites(userId: number): Observable<UserTramite[]> {
     const params = new HttpParams().set('user_id', userId);
@@ -107,22 +104,18 @@ export class TramitesService {
     );
   }
 
-  // ── Módulos ───────────────────────────────────────────────
-
   getModulos(tramId: number, lat?: number, lng?: number): Observable<ModulosResponse> {
     let params = new HttpParams().set('tipo', tramId);
     if (lat != null && lng != null) {
       params = params.set('lat', lat).set('lng', lng);
     }
     return this.http.get<ApiResp<ModulosResponse>>(
-      `${this.BASE}/Modulo.php`, { params }  // ← M mayúscula, igual que tu archivo
+      `${this.BASE}/Modulo.php`, { params }
     ).pipe(
       map(r => this.unwrap(r)),
       catchError(this.handleError)
     );
   }
-
-  // ── Helpers ───────────────────────────────────────────────
 
   private unwrap<T>(resp: ApiResp<T>): T {
     if (!resp.ok) throw new Error((resp as ApiError).message);
