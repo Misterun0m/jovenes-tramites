@@ -52,7 +52,16 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
   inputTexto: string = '';
   cargando: boolean = false;
 
-  private readonly STORAGE_KEY = 'tramitebot_chat';
+ private get STORAGE_KEY(): string {
+  const user = localStorage.getItem('user');
+  if (user) {
+    try {
+      const parsed = JSON.parse(user);
+      return `tramitebot_chat_${parsed.user_id}`;
+    } catch { }
+  }
+  return 'tramitebot_chat_guest';
+}
 
   constructor(
     private cdr: ChangeDetectorRef,
