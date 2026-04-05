@@ -110,22 +110,29 @@ export class PrincipalTramites implements OnInit {
     this.router.navigate(['/pantalla_usuario']);
   }
 
-  cerrarSesion() {
-    Swal.fire({
-      title: '¿Cerrar sesión?',
-      text: 'Tendrás que volver a ingresar tu correo y contraseña.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#9333EA',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Sí, salir',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem('usuarioSesion');
-        localStorage.removeItem('tramiteSeleccionado');
-        this.router.navigate(['/login']);
+ cerrarSesion() {
+  Swal.fire({
+    title: '¿Cerrar sesión?',
+    text: 'Tendrás que volver a ingresar tu correo y contraseña.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#9333EA',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sí, salir',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const userRaw = localStorage.getItem('usuarioSesion');
+      if (userRaw) {
+        try {
+          const parsed = JSON.parse(userRaw);
+          localStorage.removeItem(`tramitebot_chat_${parsed.user_id}`);
+        } catch {}
       }
-    });
-  }
+      localStorage.removeItem('usuarioSesion');
+      localStorage.removeItem('tramiteSeleccionado');
+      this.router.navigate(['/login']);
+    }
+  });
+}
 }

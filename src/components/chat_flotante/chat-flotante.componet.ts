@@ -52,29 +52,27 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
   inputTexto: string = '';
   cargando: boolean = false;
 
- private get STORAGE_KEY(): string {
-  const user = localStorage.getItem('user');
-  if (user) {
-    try {
-      const parsed = JSON.parse(user);
-      return `tramitebot_chat_${parsed.user_id}`;
-    } catch { }
+  private get STORAGE_KEY(): string {
+    const user = localStorage.getItem('usuarioSesion');
+    if (user) {
+      try {
+        const parsed = JSON.parse(user);
+        return `tramitebot_chat_${parsed.user_id}`;
+      } catch { }
+    }
+    return 'tramitebot_chat_guest';
   }
-  return 'tramitebot_chat_guest';
-}
 
   constructor(
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
-  // ── Sesión (se mantiene por si otras partes del proyecto lo usan) ─────────────
   get estaLogueado(): boolean {
-    return !!localStorage.getItem('user');
+    return !!localStorage.getItem('usuarioSesion');
   }
 
   ngOnInit(): void {
-    // ✅ Siempre se inicializa el chat, sin importar si hay sesión
     this.cargarHistorial();
 
     if (this.mensajes.length === 0) {
@@ -90,15 +88,13 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
     this.guardarHistorial();
   }
 
-  // ── Abrir / cerrar ────────────────────────────────────────────────────────────
-
   toggleChat(): void {
     this.abierto = !this.abierto;
 
     if (this.abierto) {
       setTimeout(() => {
         this.scrollAbajo();
-        this.inputRef?.nativeElement?.focus(); // ✅ Siempre hace foco
+        this.inputRef?.nativeElement?.focus();
       }, 100);
     }
   }
@@ -106,11 +102,9 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
   irARegistro(): void { this.router.navigate(['/registro']); this.abierto = false; }
   irALogin(): void    { this.router.navigate(['/login']);    this.abierto = false; }
 
-  // ── Enviar mensaje ────────────────────────────────────────────────────────────
-
   async enviarMensaje(): Promise<void> {
     const texto = this.inputTexto.trim();
-    if (!texto || this.cargando) return; // ✅ Sin restricción de sesión
+    if (!texto || this.cargando) return;
 
     this.mensajes.push({ role: 'user', content: texto, timestamp: new Date() });
     this.inputTexto = '';
@@ -179,8 +173,6 @@ export class ChatFlotanteComponent implements OnInit, OnDestroy {
     localStorage.removeItem(this.STORAGE_KEY);
     this.cdr.detectChanges();
   }
-
-  // ── Historial ─────────────────────────────────────────────────────────────────
 
   private guardarHistorial(): void {
     const data = this.mensajes.filter(m => !m.loading).map(m => ({

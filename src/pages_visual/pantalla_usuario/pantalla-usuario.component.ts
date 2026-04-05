@@ -131,24 +131,31 @@ export class PantallaUsuarioComponent implements OnInit {
 
   irTutorial(): void { this.router.navigate(['/principal-tramites']); }
 
-  cerrarSesion(): void {
-    Swal.fire({
-      title: '¿Cerrar sesión?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, salir',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#ef4444',
-    }).then(result => {
-      if (result.isConfirmed) {
-        this.usuarioService.logout().subscribe({
-          next: () => { localStorage.clear(); this.router.navigate(['/login']); },
-          error: () => Swal.fire('Error', 'No se pudo cerrar sesión.', 'error')
-        });
+cerrarSesion() {
+  Swal.fire({
+    title: '¿Cerrar sesión?',
+    text: 'Tendrás que volver a ingresar tu correo y contraseña.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#9333EA',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sí, salir',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const userRaw = localStorage.getItem('usuarioSesion');
+      if (userRaw) {
+        try {
+          const parsed = JSON.parse(userRaw);
+          localStorage.removeItem(`tramitebot_chat_${parsed.user_id}`);
+        } catch {}
       }
-    });
-  }
-
+      localStorage.removeItem('usuarioSesion');
+      localStorage.removeItem('tramiteSeleccionado');
+      this.router.navigate(['/login']);
+    }
+  });
+}
   // ── Edición de perfil ─────────────────────────────────────────
 
   abrirEdicion(): void {
