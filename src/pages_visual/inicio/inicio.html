@@ -2,25 +2,26 @@
 <nav class="navbar-custom">
   <div class="navbar-brand">
     <div class="brand-icon">
-      <i  id="huella"   class="bi bi-fingerprint"></i></div>
+      <i id="huella" class="bi bi-fingerprint"></i>
+    </div>
     <div class="brand-name">
- Inicio Ciudadano
-       <span>Portal de Ayuda</span>
+      Inicio Ciudadano
+      <span>Portal de Ayuda</span>
     </div>
   </div>
   <div class="nav-btns">
-    <button class="btn-nav-outline" (click)="irALogin()">Iniciar sesión</button>
+    <button class="btn-nav-outline" (click)="irALogin()">Iniciar Sesión</button>
     <button class="btn-nav-fill"    (click)="irARegistro()">Registrarse</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><i class="bi bi-shield-check"></i> Guia de tramites segura </div>
+  <div class="hero-badge"><i class="bi bi-shield-check"></i> Guía de trámites segura</div>
   <h1>Tu guía para los <em>trámites</em><br>más importantes de tu vida</h1>
   <p>Todo lo que necesitas saber para comenzar tu vida adulta, en un solo lugar.</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Trámites disponibles</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Trámites disponibles</div></div>
     <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
     <div class="stat"><div class="stat-num">18+</div><div class="stat-label">Para ti</div></div>
   </div>
@@ -47,14 +48,13 @@
   </div>
 
   <!-- TEASER PANEL -->
-  <div class="teaser-panel"id="teaserPanel" *ngIf="tramiteSeleccionado">
+  <div class="teaser-panel" id="teaserPanel" *ngIf="tramiteSeleccionado">
 
     <div class="teaser-header">
       <h5>
         <i class="bi {{ tramiteSeleccionado.icono }}"></i>
         {{ tramiteSeleccionado.nombre }}
       </h5>
-   
     </div>
 
     <div class="teaser-body">
@@ -63,7 +63,7 @@
       <div class="dato-curioso">
         <div class="dato-emoji">{{ tramiteSeleccionado.emoji }}</div>
         <div class="dato-content">
-          <div class="dato-label"> ¿Sabías que...?</div>
+          <div class="dato-label">¿Sabías que...?</div>
           <div class="dato-texto" [innerHTML]="tramiteSeleccionado.dato"></div>
         </div>
       </div>
@@ -79,7 +79,7 @@
 
       <!-- CTA -->
       <div class="teaser-cta">
-        <p> Regístrate gratis para ver el tutorial completo con
+        <p>Regístrate gratis para ver el tutorial completo con
           <span>documentos exactos, tiempos de espera y costos actualizados</span>
         </p>
         <button class="btn-cta" (click)="irARegistro()">
