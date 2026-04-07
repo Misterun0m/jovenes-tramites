@@ -1,7 +1,7 @@
 <nav class="navbar navbar-light bg-white shadow-sm fixed-top" style="height: 60px;">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">
-        <button class="navbar-back"  (click)="irAtras()">
+      <button class="navbar-back" (click)="irAtras()">
         <i class="bi bi-arrow-left fs-4"></i>
       </button>
       <img src="/img/logo.png" width="35" alt="Logo">
@@ -38,12 +38,45 @@
         </p>
 
         <div class="actions-group">
-          <button class="btn-main primary" (click)="irAlPortal()" type="button">Ir al portal</button>
-          <button class="btn-main secondary" (click)="irAlInicio()" type="button">Inicio</button>
+          <button class="btn-main primary" (click)="abrirModalEstado('portal')" type="button">Ir al portal</button>
+          <button class="btn-main secondary" (click)="abrirModalEstado('inicio')" type="button">Inicio</button>
         </div>
       </section>
 
     </section>
   </main>
 </div>
+
+<!-- MODAL ESTADO -->
+<div class="estado-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="estado-modal animate-card" (click)="$event.stopPropagation()">
+
+    <div class="modal-header-custom">
+      <div class="modal-icon"><i class="bi bi-clipboard2-check"></i></div>
+      <h3>¿Quieres actualizar el estado de tu trámite?</h3>
+      <p>Selecciona el estado actual de <strong>{{ tramiteLabel }}</strong></p>
+    </div>
+
+    <div class="estado-opciones">
+      <button
+        *ngFor="let op of estadoOpciones"
+        class="estado-btn"
+        [class.selected]="estadoSeleccionado === op.valor"
+        (click)="seleccionarEstado(op.valor)">
+        <span class="estado-dot" [ngClass]="op.clase"></span>
+        {{ op.label }}
+        <i class="bi bi-check2 check-icon" *ngIf="estadoSeleccionado === op.valor"></i>
+      </button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-modal-skip" (click)="continuarSinCambiar()">Omitir</button>
+      <button class="btn-modal-confirm" (click)="confirmarEstado()" [disabled]="!estadoSeleccionado">
+        Confirmar y continuar
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <app-chat-flotante />
