@@ -108,6 +108,7 @@ export class ExitoTramites implements OnInit {
     this.mostrarModal = false;
     if (this.accionPendiente === 'portal') {
       if (this.portalOficial) window.open(this.portalOficial, '_blank');
+       this.router.navigate(['/principal-tramites']);
     } else {
       this.router.navigate(['/principal-tramites']);
     }
