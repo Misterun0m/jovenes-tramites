@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { TramitesService, Modulo, ModulosResponse } from '../../services/tramites.service_maps';
+import { UsuarioService } from '../../services/usuario.service';
 import { ChatFlotanteComponent } from '../../components/chat_flotante/chat-flotante.componet';
 
 declare const google: any;
@@ -29,10 +30,13 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
   private infoWindow?:   any;
   private lineaRuta?:    any;
 
+  private readonly SESSION_KEY = 'usuarioSesion';
+
   tramId             = 0;
   tramiteLabel       = 'Trámite';
   modulosFiltrados:  Modulo[] = [];
   moduloSeleccionado?: Modulo;
+  userIdtramite      = 0;   // ← nuevo
 
   cargandoModulos    = false;
   cargandoUbicacion  = false;
@@ -42,17 +46,37 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
   userLng?:          number;
 
   constructor(
-    private route:  ActivatedRoute,
-    private router: Router,
-    private svc:    TramitesService,
-    private zone:   NgZone,
-    private cdr:    ChangeDetectorRef
+    private route:          ActivatedRoute,
+    private router:         Router,
+    private svc:            TramitesService,
+    private usuarioService: UsuarioService,   // ← nuevo
+    private zone:           NgZone,
+    private cdr:            ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.tramId       = parseInt(params['tram_id'], 10) || 0;
       this.tramiteLabel = params['tram_tip'] ?? 'Trámite';
+
+      this.cargarUserIdTramite();   // ← nuevo
+    });
+  }
+
+  // ── Obtiene el user_idtramite desde la sesión + API ───────
+  private cargarUserIdTramite(): void {
+    const sesion = localStorage.getItem(this.SESSION_KEY);
+    if (!sesion) return;
+
+    const userId = JSON.parse(sesion)?.user_id;
+    if (!userId || !this.tramId) return;
+
+    this.usuarioService.getTramitesUsuario(userId).subscribe({
+      next: (tramites: any[]) => {
+        const match = tramites.find(t => t.tram_id === this.tramId);
+        this.userIdtramite = match?.user_idtramite ?? 0;
+      },
+      error: () => { this.userIdtramite = 0; }
     });
   }
 
@@ -113,7 +137,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.errorUbicacion    = null;
     this.cdr.detectChanges();
 
-    // Timeout manual por si el usuario no responde el popup
     const timeoutId = setTimeout(() => {
       this.zone.run(() => {
         this.cargandoUbicacion = false;
@@ -142,7 +165,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cargandoUbicacion = false;
     this.ubicacionObtenida = true;
 
-    // Marcador azul del usuario
     if (this.marcadorUser) this.marcadorUser.setMap(null);
     this.marcadorUser = new google.maps.Marker({
       position: { lat: this.userLat!, lng: this.userLng! },
@@ -159,7 +181,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
       zIndex: 999
     });
 
-    // Círculo de precisión
     new google.maps.Circle({
       map:          this.map,
       center:       { lat: this.userLat!, lng: this.userLng! },
@@ -202,7 +223,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
       console.warn('⚠️ tramId inválido:', this.tramId);
       return;
     }
-    console.log('📡 Llamando API con tramId:', this.tramId, 'lat:', this.userLat, 'lng:', this.userLng);
     this.cargandoModulos = true;
     this.cdr.detectChanges();
 
@@ -210,7 +230,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
       map((resp: ModulosResponse) => resp.modulos)
     ).subscribe({
       next: (modulos) => {
-        console.log('✅ Módulos recibidos:', modulos);
         this.modulosFiltrados = modulos;
         this.cargandoModulos  = false;
         this.renderizarMarcadores();
@@ -265,7 +284,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.marcadores.push(marker);
 
-      // Solo agrega al bounds los 3 más cercanos
       if (i < 3) {
         bounds.extend({ lat: modulo.lat, lng: modulo.lng });
       }
@@ -273,14 +291,12 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.modulosFiltrados.length > 0) {
       if (this.ubicacionObtenida) {
-        // Con ubicación: centra en el más cercano con zoom 12
         this.map.setCenter({
           lat: this.modulosFiltrados[0].lat,
           lng: this.modulosFiltrados[0].lng
         });
         this.map.setZoom(12);
       } else {
-        // Sin ubicación: ajusta bounds de los primeros 3
         this.map.fitBounds(bounds, { padding: 60 });
       }
     }
@@ -323,7 +339,6 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map.panTo({ lat: modulo.lat, lng: modulo.lng });
     }
 
-    // Línea desde usuario al módulo seleccionado
     if (this.lineaRuta) this.lineaRuta.setMap(null);
     if (this.userLat && this.userLng) {
       this.lineaRuta = new google.maps.Polyline({
@@ -360,15 +375,17 @@ export class MapaTramitesComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // ── Navega a éxito pasando user_idtramite ─────────────────
   irSiguiente(): void {
     const modulo = this.moduloSeleccionado ?? this.modulosFiltrados[0];
     if (!modulo) return;
     this.router.navigate(['/exito-tramites'], {
       queryParams: {
-        tram_id:   this.tramId,
-        tram_tip:  this.tramiteLabel,
-        modulo_id: modulo.modulo_id,
-        nombre:    modulo.nombre
+        tram_id:        this.tramId,
+        tram_tip:       this.tramiteLabel,
+        modulo_id:      modulo.modulo_id,
+        nombre:         modulo.nombre,
+        user_idtramite: this.userIdtramite   // ← fix
       }
     });
   }
