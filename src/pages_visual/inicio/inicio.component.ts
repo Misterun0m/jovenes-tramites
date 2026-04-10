@@ -24,6 +24,7 @@ export class InicioComponent {
       icono: 'bi-person-vcard',
       iconClass: 'icon-ine',
       emoji: '🗳️',
+      proximamente: false,
       dato: 'Cada año, <strong>miles de jóvenes pierden su derecho a votar</strong> porque no tramitaron su INE a tiempo. El proceso cierra meses antes de las elecciones y no hay excepciones.',
       pasos: [
         { texto: 'Agenda tu cita en el módulo del INE más cercano a ti', visible: true },
@@ -33,18 +34,19 @@ export class InicioComponent {
       ]
     },
     {
-      id: 'Pasaporte',
-      nombre: 'Pasaporte',
-      descripcion: 'Documento necesario para viajar al extranjero.',
-      icono: 'bi-airplane-engines',
-      iconClass: 'icon-pasaporte',
-      emoji: '✈️',
-      dato: 'El pasaporte mexicano es uno de los <strong>más poderosos de América Latina</strong> — te da acceso sin visa a más de 65 países. Pero tramitarlo puede tardar hasta <strong>4 semanas</strong> si no sabes cómo hacerlo bien.',
+      id: 'Cartilla',
+      nombre: 'Cartilla Militar',
+      descripcion: 'Documento obligatorio para hombres al cumplir 18 años.',
+      icono: 'bi-shield-fill',
+      iconClass: 'icon-cartilla',
+      emoji: '🪖',
+      proximamente: false,
+      dato: 'La cartilla militar es <strong>obligatoria para todos los hombres mexicanos</strong> al cumplir 18 años. Sin ella no puedes obtener empleo formal, pasaporte ni muchos trámites gubernamentales.',
       pasos: [
-        { texto: 'Ingresa al portal de la SRE y elige tu oficina de pasaportes', visible: true },
-        { texto: 'Reúne acta de nacimiento certificada y CURP actualizada', visible: true },
-        { texto: 'Cuánto cuesta según tu edad y tipo de pasaporte + dónde pagar', visible: false },
-        { texto: 'Cómo acelerar la entrega si tienes viaje urgente', visible: false },
+        { texto: 'Localiza la delegación o junta municipal de reclutamiento más cercana', visible: true },
+        { texto: 'Reúne acta de nacimiento, CURP y fotografías tamaño infantil', visible: true },
+        { texto: 'Proceso de registro, sorteo y liberación de obligaciones militares', visible: false },
+        { texto: 'Qué hacer si perdiste tu cartilla o tiene errores', visible: false },
       ]
     },
     {
@@ -54,6 +56,7 @@ export class InicioComponent {
       icono: 'bi-person-badge-fill',
       iconClass: 'icon-curp',
       emoji: '📋',
+      proximamente: false,
       dato: 'Tu CURP <strong>puede tener errores</strong> sin que lo sepas — y eso puede bloquearte al tramitar tu INE, RFC o pasaporte. El <strong>30% de los jóvenes</strong> descubren errores hasta que intentan hacer otro trámite.',
       pasos: [
         { texto: 'Entra a gob.mx y busca tu CURP con tu nombre y fecha de nacimiento', visible: true },
@@ -69,6 +72,7 @@ export class InicioComponent {
       icono: 'bi-file-earmark-text',
       iconClass: 'icon-rfc',
       emoji: '💼',
+      proximamente: false,
       dato: 'Sin RFC <strong>no puedes recibir un sueldo formal ni facturar</strong>. Lo que pocos saben: puedes tramitarlo completamente en línea en menos de <strong>20 minutos</strong>, pero hay un paso que casi todos hacen mal.',
       pasos: [
         { texto: 'Crea tu cuenta en el portal del SAT con tu CURP y correo', visible: true },
@@ -84,6 +88,7 @@ export class InicioComponent {
       icono: 'bi-heart-pulse',
       iconClass: 'icon-imss',
       emoji: '🏥',
+      proximamente: false,
       dato: 'Muchos jóvenes <strong>tienen IMSS y no lo saben</strong> — si alguna vez trabajaste formalmente, ya tienes un NSS asignado. Recuperarlo toma 5 minutos, pero sin él podrías perder años de semanas cotizadas para tu pensión.',
       pasos: [
         { texto: 'Entra a imss.gob.mx y busca tu NSS con tu CURP', visible: true },
@@ -91,10 +96,22 @@ export class InicioComponent {
         { texto: 'Qué servicios médicos puedes usar desde hoy y cómo acceder', visible: false },
         { texto: 'Cómo proteger tus semanas cotizadas aunque cambies de trabajo', visible: false },
       ]
+    },
+    {
+      id: 'Proximamente',
+      nombre: 'Próximamente',
+      descripcion: 'Nuevos trámites en camino para ti.',
+      icono: 'bi-hourglass-split',
+      iconClass: 'icon-proximamente',
+      emoji: '🚀',
+      proximamente: true,
+      dato: '',
+      pasos: []
     }
   ];
 
   seleccionarTramite(tramite: any) {
+    if (tramite.proximamente) return;
     this.tramiteSeleccionado = tramite;
     setTimeout(() => {
       const panel = document.getElementById('teaserPanel');

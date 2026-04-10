@@ -21,7 +21,7 @@
   <h1>Tu guía para los <em>trámites</em><br>más importantes de tu vida</h1>
   <p>Todo lo que necesitas saber para comenzar tu vida adulta, en un solo lugar.</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Trámites disponibles</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Trámites disponibles</div></div>
     <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
     <div class="stat"><div class="stat-num">18+</div><div class="stat-label">Para ti</div></div>
   </div>
@@ -34,7 +34,10 @@
 
   <div class="row g-3 mb-4">
     <div class="col-md-6 col-lg-4" *ngFor="let tramite of tramites">
+
+      <!-- Tarjeta normal -->
       <div class="tramite-card"
+           *ngIf="!tramite.proximamente"
            [class.activa]="tramiteSeleccionado?.id === tramite.id"
            (click)="seleccionarTramite(tramite)">
         <div class="card-icon-wrap {{ tramite.iconClass }}">
@@ -44,6 +47,18 @@
         <div class="card-desc">{{ tramite.descripcion }}</div>
         <div class="card-arrow"><i class="bi bi-arrow-right"></i></div>
       </div>
+
+      <!-- Tarjeta Próximamente -->
+      <div class="tramite-card proximamente-card"
+           *ngIf="tramite.proximamente">
+        <div class="card-icon-wrap {{ tramite.iconClass }}">
+          <i class="bi {{ tramite.icono }}"></i>
+        </div>
+        <div class="card-title">{{ tramite.nombre }}</div>
+        <div class="card-desc">{{ tramite.descripcion }}</div>
+        <span class="proximamente-badge">🚀 Próximamente</span>
+      </div>
+
     </div>
   </div>
 
