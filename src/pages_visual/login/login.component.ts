@@ -74,122 +74,170 @@ export class LoginComponent implements AfterViewInit {
     this.googleAuth.renderButton('googleButton');
   }
 
-/* =========================
-   LOGIN NORMAL
-========================= */
-loginNormal(): void {
-  if (this.isLoading) return;
+  /* =========================
+     TÉRMINOS Y CONDICIONES
+  ========================= */
+  private mostrarTerminos(): Promise<boolean> {
+    return Swal.fire({
+      title: '<strong>Términos y Condiciones</strong>',
+      icon: 'info',
+      width: '680px',
+      html: `
+        <div style="
+          text-align: left;
+          max-height: 340px;
+          overflow-y: auto;
+          font-size: 13.5px;
+          line-height: 1.7;
+          padding: 4px 8px;
+          color: #333;
+        ">
+          <p>Al acceder y utilizar la aplicación web <strong>Inicio Ciudadano</strong>, aceptas cumplir con los presentes Términos y Condiciones. Si no estás de acuerdo, deberás abstenerse de utilizar la aplicación.</p>
 
-  const correoLimpio   = this.correo.trim();
-  // NO hacemos trim() a la contraseña — la tomamos exactamente como se escribió
-  const passwordExacta = this.password;
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">1. Descripción del servicio</h4>
+          <p>Inicio Ciudadano orienta a jóvenes de 18 años sobre trámites ciudadanos en México: credencial para votar (INE), RFC, NSS, cartilla militar y licencia de conducir.</p>
 
-  // ── 1. Campos vacíos ──────────────────────────────────────────
-  if (!correoLimpio || !passwordExacta) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Campos obligatorios',
-      text: 'Ingresa tu correo y contraseña.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">2. Uso adecuado</h4>
+          <p>El usuario se compromete a usar la aplicación únicamente con fines informativos. Queda prohibido:</p>
+          <ul style="padding-left:18px; margin:4px 0;">
+            <li>Utilizar la aplicación para fines ilegales.</li>
+            <li>Manipular, alterar o intentar acceder al código fuente.</li>
+            <li>Usar la información con fines fraudulentos o engañosos.</li>
+          </ul>
+
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">3. Fuentes de información</h4>
+          <p>La información proviene de fuentes oficiales del gobierno mexicano.</p>
+
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">4. Limitación de responsabilidad</h4>
+          <p>Los desarrolladores no se responsabilizan por cambios en requisitos de trámites gubernamentales ni por problemas con enlaces externos.</p>
+
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">5. Protección de datos</h4>
+          <p>Los datos serán tratados conforme a la <em>Ley Federal de Protección de Datos Personales en Posesión de los Particulares</em>.</p>
+
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">6. Propiedad intelectual</h4>
+          <p>El contenido y diseño son propiedad de sus desarrolladores. Queda prohibida su reproducción sin autorización.</p>
+
+          <h4 style="margin:14px 0 4px; color:#7b2cbf;">7. Contacto</h4>
+          <p>Para dudas: <a href="mailto:iniciociudadano@gmail.com" style="color:#7b2cbf;">iniciociudadano@gmail.com</a></p>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Acepto los términos',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#7b2cbf',
+      cancelButtonColor: '#9d4edd',
+      reverseButtons: true
+    }).then(result => result.isConfirmed);
   }
 
-  // ── 2. Formato de correo ───────────────────────────────────────
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(correoLimpio)) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Correo inválido',
-      text: 'Ingresa un correo electrónico con formato válido.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
-  }
+  /* =========================
+     LOGIN NORMAL
+  ========================= */
+  loginNormal(): void {
+    if (this.isLoading) return;
 
-  // ── 3. Espacio al inicio o al final de la contraseña ──────────
-  if (passwordExacta !== passwordExacta.trim()) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Contraseña con espacios',
-      text: 'Tu contraseña no debe comenzar ni terminar con espacios.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
-  }
+    const correoLimpio   = this.correo.trim();
+    const passwordExacta = this.password;
 
-  // ── 4. Espacios consecutivos dentro de la contraseña ──────────
-  if (/\s{2,}/.test(passwordExacta)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Contraseña inválida',
-      text: 'Tu contraseña no debe contener espacios consecutivos.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
-  }
+    if (!correoLimpio || !passwordExacta) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos obligatorios',
+        text: 'Ingresa tu correo y contraseña.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
 
-  // ── 5. Solo espacios (contraseña en blanco disfrazada) ─────────
-  if (!passwordExacta.trim()) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Contraseña vacía',
-      text: 'La contraseña no puede estar compuesta solo de espacios.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(correoLimpio)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Correo inválido',
+        text: 'Ingresa un correo electrónico con formato válido.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
 
-  // ── 6. Longitud mínima ─────────────────────────────────────────
-  if (passwordExacta.trim().length < 6) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Contraseña muy corta',
-      text: 'La contraseña debe tener al menos 6 caracteres.',
-      confirmButtonColor: '#7b2cbf'
-    });
-    return;
-  }
+    if (passwordExacta !== passwordExacta.trim()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Contraseña con espacios',
+        text: 'Tu contraseña no debe comenzar ni terminar con espacios.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
 
-  // ── Todo OK: llamar al backend con la contraseña EXACTA ────────
-  this.isLoading = true;
-  this.cdr.detectChanges();
+    if (/\s{2,}/.test(passwordExacta)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Contraseña inválida',
+        text: 'Tu contraseña no debe contener espacios consecutivos.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
 
-  this.backend.loginNormal(correoLimpio, passwordExacta)
-    .pipe(finalize(() => {
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    }))
-    .subscribe({
-      next: (res: ApiResponse) => {
-        if (res.success) {
-          if (res.user) localStorage.setItem(this.SESSION_KEY, JSON.stringify(res.user));
-          this.navegarSegunDatos(res.user);
-        } else {
+    if (!passwordExacta.trim()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Contraseña vacía',
+        text: 'La contraseña no puede estar compuesta solo de espacios.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
+
+    if (passwordExacta.trim().length < 6) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Contraseña muy corta',
+        text: 'La contraseña debe tener al menos 6 caracteres.',
+        confirmButtonColor: '#7b2cbf'
+      });
+      return;
+    }
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.backend.loginNormal(correoLimpio, passwordExacta)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (res: ApiResponse) => {
+          if (res.success) {
+            if (res.user) localStorage.setItem(this.SESSION_KEY, JSON.stringify(res.user));
+            this.navegarSegunDatos(res.user);
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Credenciales incorrectas',
+              text: res.message || 'Verifica tu correo o contraseña.',
+              confirmButtonColor: '#7b2cbf'
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error HTTP:', err);
+          let mensaje = 'Error inesperado. Intenta de nuevo.';
+          if (err.status === 0)    mensaje = 'Sin conexión con el servidor.';
+          else if (err.status === 401) mensaje = 'Correo o contraseña incorrectos.';
+          else if (err.status === 500) mensaje = 'Error interno del servidor.';
+
           Swal.fire({
             icon: 'error',
-            title: 'Credenciales incorrectas',
-            text: res.message || 'Verifica tu correo o contraseña.',
+            title: 'Error al iniciar sesión',
+            text: mensaje,
             confirmButtonColor: '#7b2cbf'
           });
         }
-      },
-      error: (err) => {
-        console.error('Error HTTP:', err);
-        let mensaje = 'Error inesperado. Intenta de nuevo.';
-        if (err.status === 0)    mensaje = 'Sin conexión con el servidor.';
-        else if (err.status === 401) mensaje = 'Correo o contraseña incorrectos.';
-        else if (err.status === 500) mensaje = 'Error interno del servidor.';
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al iniciar sesión',
-          text: mensaje,
-          confirmButtonColor: '#7b2cbf'
-        });
-      }
-    });
-}
+      });
+  }
 
   /* =========================
      LOGIN GOOGLE
@@ -216,9 +264,24 @@ loginNormal(): void {
         this.cdr.detectChanges();
       }))
       .subscribe({
-        next: (res: ApiResponse) => {
+        next: async (res: ApiResponse) => {
           if (res.success) {
             if (res.user) localStorage.setItem(this.SESSION_KEY, JSON.stringify(res.user));
+
+            // ── Detectar si es usuario nuevo (sin sexo ni fecha) ──
+            const esNuevo =
+              !res.user?.user_sex?.trim() &&
+              !res.user?.fecha_nacimiento?.trim();
+
+            if (esNuevo) {
+              const acepto = await this.mostrarTerminos();
+              if (!acepto) {
+                // Rechazó los términos — limpiar sesión y no continuar
+                localStorage.removeItem(this.SESSION_KEY);
+                return;
+              }
+            }
+
             this.navegarSegunDatos(res.user);
           } else {
             Swal.fire({
@@ -244,17 +307,13 @@ loginNormal(): void {
      REDIRECCIÓN SEGÚN DATOS
   ========================= */
   private navegarSegunDatos(user: any): void {
-    // FIX PRINCIPAL: user_sex y fecha_nacimiento pueden ser null,
-    // undefined o string vacío — se normaliza todo antes de .trim()
-    const userSex  = user?.user_sex          ?? '';
-    const fechaNac = user?.fecha_nacimiento  ?? '';
+    const userSex  = user?.user_sex         ?? '';
+    const fechaNac = user?.fecha_nacimiento ?? '';
 
-    // FIX: typeof string antes de llamar .trim() para evitar crash con null
     const faltaSexo  = typeof userSex  !== 'string' || !userSex.trim();
     const faltaFecha = typeof fechaNac !== 'string' || !fechaNac.trim();
     const faltaDatos = faltaSexo || faltaFecha;
 
-    // Verificar que se guardó correctamente antes de navegar
     const userGuardado = localStorage.getItem(this.SESSION_KEY);
     if (!userGuardado) return;
 
