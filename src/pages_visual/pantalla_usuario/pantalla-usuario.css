@@ -784,12 +784,13 @@
 .pf-input-wrap.input-error { border-color: #ef4444 !important; }
 .pf-input-wrap.input-ok    { border-color: #10b981 !important; }
 
+/* ─── Botón Cambiar Contraseña ─── */
 .btn-cambiar-pass {
   align-self: flex-start;
-  background: var(--brand);
-  color: white;
+  background-color: #7c3aed !important;
+  color: #ffffff !important;
   border: none;
-  padding: 11px 24px;
+  padding: 10px 22px;
   border-radius: 25px;
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
@@ -798,12 +799,25 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: transform .2s, box-shadow .2s;
+  transition: background-color .2s, transform .2s, box-shadow .2s;
+  text-decoration: none;
+  line-height: 1.5;
 }
 
-.btn-cambiar-pass:hover {
+.btn-cambiar-pass:hover:not(:disabled) {
+  background-color: #5b21b6 !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(124,58,237,.3);
+  box-shadow: 0 8px 20px rgba(124,58,237,.35);
+}
+
+.btn-cambiar-pass:disabled {
+  background-color: #c4b5fd !important;
+  color: #ffffff !important;
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* ─── Botones de acción principales ─── */
@@ -916,20 +930,4 @@
   font-weight: 700;
   color: white;
   text-align: center;
-}
-.btn-cambiar-pass {
-  align-self: flex-start;
-  background: var(--brand) !important;
-  color: white !important;
-  border: none;
-  padding: 11px 24px;
-  border-radius: 25px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: transform .2s, box-shadow .2s;
 }
